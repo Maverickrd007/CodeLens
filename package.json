@@ -1,0 +1,13 @@
+{
+  "name": "codelens",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AI-powered codebase assistant for exploring and reasoning about software projects.",
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
