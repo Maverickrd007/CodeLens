@@ -28,9 +28,10 @@ codelens/
 ```bash
 npm install
 npm run lint
+npm run dev:server
 ```
 
-The runnable API entry point is introduced in Phase 1 after the Express health check is added.
+The API starts on `http://localhost:5000` by default. Visit `GET /health` to verify the server is running.
 
 ## Development Workflow
 

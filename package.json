@@ -5,6 +5,9 @@
   "type": "module",
   "description": "AI-powered codebase assistant for exploring and reasoning about software projects.",
   "scripts": {
+    "dev": "npm run dev:server",
+    "dev:server": "npm run dev --workspace @codelens/server",
+    "start:server": "npm run start --workspace @codelens/server",
     "lint": "eslint .",
     "format": "prettier . --write",
     "format:check": "prettier . --check"
