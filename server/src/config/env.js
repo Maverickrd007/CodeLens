@@ -20,6 +20,7 @@ export const env = {
   nodeEnv: process.env.NODE_ENV ?? 'development',
   port: parsePort(process.env.PORT),
   clientOrigin: process.env.CLIENT_ORIGIN ?? 'http://localhost:5173',
+  mongoUri: process.env.MONGODB_URI ?? 'mongodb://127.0.0.1:27017/codelens',
 };
 
 export const isProduction = env.nodeEnv === 'production';
