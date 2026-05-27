@@ -16,6 +16,20 @@ function parsePort(value) {
   return port;
 }
 
+function parsePositiveInteger(value, fallback, name) {
+  if (value === undefined || value === '') {
+    return fallback;
+  }
+
+  const parsedValue = Number(value);
+
+  if (!Number.isInteger(parsedValue) || parsedValue < 1) {
+    throw new Error(`Invalid ${name} value "${value}". Expected a positive integer.`);
+  }
+
+  return parsedValue;
+}
+
 export const env = {
   nodeEnv: process.env.NODE_ENV ?? 'development',
   port: parsePort(process.env.PORT),
@@ -23,6 +37,11 @@ export const env = {
   mongoUri: process.env.MONGODB_URI ?? 'mongodb://127.0.0.1:27017/codelens',
   jwtAccessSecret: process.env.JWT_ACCESS_SECRET,
   jwtAccessExpiresIn: process.env.JWT_ACCESS_EXPIRES_IN ?? '15m',
+  refreshTokenExpiresInDays: parsePositiveInteger(
+    process.env.REFRESH_TOKEN_EXPIRES_IN_DAYS,
+    30,
+    'REFRESH_TOKEN_EXPIRES_IN_DAYS'
+  ),
 };
 
 export const isProduction = env.nodeEnv === 'production';

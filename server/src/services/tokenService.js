@@ -1,3 +1,5 @@
+import crypto from 'node:crypto';
+
 import jwt from 'jsonwebtoken';
 
 import { env } from '../config/env.js';
@@ -24,4 +26,17 @@ export function createAccessToken(user) {
       audience: 'codelens-client',
     }
   );
+}
+
+export function createRefreshToken() {
+  return crypto.randomBytes(64).toString('base64url');
+}
+
+export function hashRefreshToken(refreshToken) {
+  return crypto.createHash('sha256').update(refreshToken).digest('hex');
+}
+
+export function getRefreshTokenExpiryDate() {
+  const expiresInMs = env.refreshTokenExpiresInDays * 24 * 60 * 60 * 1000;
+  return new Date(Date.now() + expiresInMs);
 }

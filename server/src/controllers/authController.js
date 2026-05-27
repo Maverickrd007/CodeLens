@@ -1,5 +1,10 @@
 import { User } from '../models/User.js';
-import { createAccessToken } from '../services/tokenService.js';
+import {
+  createAccessToken,
+  createRefreshToken,
+  getRefreshTokenExpiryDate,
+  hashRefreshToken,
+} from '../services/tokenService.js';
 import { ApiError } from '../utils/ApiError.js';
 
 function normalizeEmail(email) {
@@ -35,6 +40,18 @@ function isDuplicateKeyError(error) {
   return error?.code === 11000;
 }
 
+async function issueAuthTokens(user) {
+  const refreshToken = createRefreshToken();
+
+  user.storeRefreshToken(hashRefreshToken(refreshToken), getRefreshTokenExpiryDate());
+  await user.save();
+
+  return {
+    accessToken: createAccessToken(user),
+    refreshToken,
+  };
+}
+
 export async function register(req, res) {
   const email = normalizeEmail(req.body.email);
   const password = req.body.password;
@@ -61,8 +78,10 @@ export async function register(req, res) {
   const user = new User({ email, name });
   await user.setPassword(password);
 
+  let tokens;
+
   try {
-    await user.save();
+    tokens = await issueAuthTokens(user);
   } catch (error) {
     if (isDuplicateKeyError(error)) {
       throw new ApiError(
@@ -77,7 +96,7 @@ export async function register(req, res) {
 
   res.status(201).json({
     user: buildUserResponse(user),
-    accessToken: createAccessToken(user),
+    tokens,
   });
 }
 
@@ -89,14 +108,70 @@ export async function login(req, res) {
     throw new ApiError(400, 'invalid_credentials', 'Email or password is incorrect.');
   }
 
-  const user = await User.findOne({ email }).select('+passwordHash');
+  const user = await User.findOne({ email }).select('+passwordHash +refreshTokens');
 
   if (!user || !(await user.verifyPassword(password))) {
     throw new ApiError(401, 'invalid_credentials', 'Email or password is incorrect.');
   }
 
+  const tokens = await issueAuthTokens(user);
+
   res.status(200).json({
     user: buildUserResponse(user),
-    accessToken: createAccessToken(user),
+    tokens,
   });
+}
+
+export async function refresh(req, res) {
+  const refreshToken = req.body.refreshToken;
+
+  if (typeof refreshToken !== 'string' || refreshToken.trim() === '') {
+    throw new ApiError(400, 'refresh_token_required', 'Refresh token is required.');
+  }
+
+  const refreshTokenHash = hashRefreshToken(refreshToken);
+  const user = await User.findOne({ 'refreshTokens.tokenHash': refreshTokenHash }).select(
+    '+refreshTokens'
+  );
+
+  if (!user) {
+    throw new ApiError(401, 'invalid_refresh_token', 'Refresh token is invalid or expired.');
+  }
+
+  const storedToken = user.refreshTokens.find((token) => token.tokenHash === refreshTokenHash);
+
+  if (!storedToken || storedToken.expiresAt <= new Date()) {
+    user.removeRefreshToken(refreshTokenHash);
+    await user.save();
+    throw new ApiError(401, 'invalid_refresh_token', 'Refresh token is invalid or expired.');
+  }
+
+  user.removeRefreshToken(refreshTokenHash);
+  const tokens = await issueAuthTokens(user);
+
+  res.status(200).json({
+    user: buildUserResponse(user),
+    tokens,
+  });
+}
+
+export async function logout(req, res) {
+  const refreshToken = req.body.refreshToken;
+
+  if (typeof refreshToken !== 'string' || refreshToken.trim() === '') {
+    res.status(204).send();
+    return;
+  }
+
+  const refreshTokenHash = hashRefreshToken(refreshToken);
+  const user = await User.findOne({ 'refreshTokens.tokenHash': refreshTokenHash }).select(
+    '+refreshTokens'
+  );
+
+  if (user) {
+    user.removeRefreshToken(refreshTokenHash);
+    await user.save();
+  }
+
+  res.status(204).send();
 }
