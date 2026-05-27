@@ -1,0 +1,29 @@
+{
+  "name": "codelens",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "AI-powered codebase assistant for exploring and reasoning about software projects.",
+  "scripts": {
+    "dev": "npm run dev:server",
+    "dev:server": "npm run dev --workspace @codelens/server",
+    "start:server": "npm run start --workspace @codelens/server",
+    "lint": "eslint .",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check"
+  },
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.4.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.6.0",
+    "prettier": "^3.8.3"
+  }
+}
