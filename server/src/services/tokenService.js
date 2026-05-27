@@ -28,6 +28,13 @@ export function createAccessToken(user) {
   );
 }
 
+export function verifyAccessToken(token) {
+  return jwt.verify(token, getAccessTokenSecret(), {
+    issuer: 'codelens-api',
+    audience: 'codelens-client',
+  });
+}
+
 export function createRefreshToken() {
   return crypto.randomBytes(64).toString('base64url');
 }

@@ -175,3 +175,9 @@ export async function logout(req, res) {
 
   res.status(204).send();
 }
+
+export async function getCurrentUser(req, res) {
+  res.status(200).json({
+    user: buildUserResponse(req.user),
+  });
+}
