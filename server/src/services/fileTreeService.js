@@ -196,48 +196,62 @@ function summarizeFiles(files) {
   );
 }
 
-function createParsedCodebase(source, files) {
+function createParsedCodebase(source, files, metadata = {}) {
   if (files.length === 0) {
     throw new ApiError(400, 'empty_codebase', 'No readable files were found in the upload.');
   }
 
   return {
     source,
+    metadata,
     tree: buildTree(files),
     files,
     summary: summarizeFiles(files),
   };
 }
 
-export function parseFolderUpload(uploadedFiles) {
-  const files = uploadedFiles
-    .map((file) => {
-      const filePath = normalizeArchivePath(file.originalname);
+export function parseBufferEntries(source, entries, metadata = {}) {
+  const files = entries
+    .map((entry) => {
+      const filePath = normalizeArchivePath(entry.path);
 
       if (!filePath || shouldIgnorePath(filePath)) {
         return null;
       }
 
-      return createFileRecord(filePath, file.buffer);
+      return createFileRecord(filePath, entry.buffer);
     })
     .filter(Boolean);
 
-  return createParsedCodebase('folder', files);
+  return createParsedCodebase(source, files, metadata);
+}
+
+export function parseFolderUpload(uploadedFiles) {
+  return parseBufferEntries(
+    'folder',
+    uploadedFiles.map((file) => ({
+      path: file.originalname,
+      buffer: file.buffer,
+    }))
+  );
 }
 
 export async function parseZipUpload(archive) {
   const directory = await unzipper.Open.buffer(archive.buffer);
-  const files = [];
+  const entries = [];
 
   for (const entry of directory.files) {
-    const filePath = normalizeArchivePath(entry.path);
-
-    if (entry.type !== 'File' || !filePath || shouldIgnorePath(filePath)) {
+    if (entry.type !== 'File') {
       continue;
     }
 
-    files.push(createFileRecord(filePath, await entry.buffer()));
+    entries.push({
+      path: entry.path,
+      buffer: await entry.buffer(),
+    });
   }
 
-  return createParsedCodebase('archive', files);
+  return parseBufferEntries('archive', entries, {
+    archiveName: archive.originalname,
+  });
 }
