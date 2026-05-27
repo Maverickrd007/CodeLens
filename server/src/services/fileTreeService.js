@@ -2,6 +2,12 @@ import path from 'node:path';
 
 import unzipper from 'unzipper';
 
+import {
+  MAX_SINGLE_SOURCE_FILE_BYTES,
+  MAX_TOTAL_SOURCE_BYTES,
+  MAX_TOTAL_SOURCE_FILES,
+  isSupportedSourcePath,
+} from '../config/ingestion.js';
 import { ApiError } from '../utils/ApiError.js';
 
 const IGNORED_DIRECTORY_NAMES = new Set([
@@ -65,6 +71,10 @@ function shouldIgnorePath(filePath) {
   return filePath.split('/').some((part) => IGNORED_DIRECTORY_NAMES.has(part));
 }
 
+function shouldSkipSourcePath(filePath) {
+  return shouldIgnorePath(filePath) || !isSupportedSourcePath(filePath);
+}
+
 function getFileLanguage(filePath) {
   const extension = path.extname(filePath).toLowerCase();
   return LANGUAGE_BY_EXTENSION.get(extension) ?? null;
@@ -94,6 +104,14 @@ function isLikelyBinary(buffer) {
 }
 
 function createFileRecord(filePath, buffer) {
+  if (buffer.length > MAX_SINGLE_SOURCE_FILE_BYTES) {
+    throw new ApiError(
+      413,
+      'source_file_too_large',
+      `${filePath} exceeds the source file size limit.`
+    );
+  }
+
   const isBinary = isLikelyBinary(buffer);
 
   return {
@@ -196,10 +214,24 @@ function summarizeFiles(files) {
   );
 }
 
+function enforceCollectionLimits(files) {
+  if (files.length > MAX_TOTAL_SOURCE_FILES) {
+    throw new ApiError(413, 'too_many_source_files', 'Codebase contains too many source files.');
+  }
+
+  const totalBytes = files.reduce((total, file) => total + file.size, 0);
+
+  if (totalBytes > MAX_TOTAL_SOURCE_BYTES) {
+    throw new ApiError(413, 'codebase_too_large', 'Codebase exceeds the total source size limit.');
+  }
+}
+
 function createParsedCodebase(source, files, metadata = {}) {
   if (files.length === 0) {
     throw new ApiError(400, 'empty_codebase', 'No readable files were found in the upload.');
   }
+
+  enforceCollectionLimits(files);
 
   return {
     source,
@@ -216,6 +248,10 @@ export function parseBufferEntries(source, entries, metadata = {}) {
       const filePath = normalizeArchivePath(entry.path);
 
       if (!filePath || shouldIgnorePath(filePath)) {
+        return null;
+      }
+
+      if (shouldSkipSourcePath(filePath)) {
         return null;
       }
 
@@ -241,12 +277,14 @@ export async function parseZipUpload(archive) {
   const entries = [];
 
   for (const entry of directory.files) {
-    if (entry.type !== 'File') {
+    const filePath = normalizeArchivePath(entry.path);
+
+    if (entry.type !== 'File' || !filePath || shouldSkipSourcePath(filePath)) {
       continue;
     }
 
     entries.push({
-      path: entry.path,
+      path: filePath,
       buffer: await entry.buffer(),
     });
   }

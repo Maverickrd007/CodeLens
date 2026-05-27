@@ -1,5 +1,12 @@
 import { Octokit } from 'octokit';
+import path from 'node:path';
 
+import {
+  MAX_SINGLE_SOURCE_FILE_BYTES,
+  MAX_TOTAL_SOURCE_BYTES,
+  MAX_TOTAL_SOURCE_FILES,
+  isSupportedSourcePath,
+} from '../config/ingestion.js';
 import { env } from '../config/env.js';
 import { ApiError } from '../utils/ApiError.js';
 import { parseBufferEntries } from './fileTreeService.js';
@@ -114,6 +121,28 @@ function isPathInPrefix(filePath, pathPrefix) {
   return pathPrefix === '' || filePath === pathPrefix || filePath.startsWith(`${pathPrefix}/`);
 }
 
+function getRelativeIngestPath(filePath, pathPrefix) {
+  if (!pathPrefix) {
+    return filePath;
+  }
+
+  if (filePath === pathPrefix) {
+    return path.posix.basename(filePath);
+  }
+
+  return filePath.slice(pathPrefix.length).replace(/^\/+/, '');
+}
+
+function validateTreeItem(treeItem) {
+  if (treeItem.size > MAX_SINGLE_SOURCE_FILE_BYTES) {
+    throw new ApiError(
+      413,
+      'source_file_too_large',
+      `${treeItem.path} exceeds the source file size limit.`
+    );
+  }
+}
+
 async function fetchBlobBuffer(owner, repo, fileSha) {
   const { data } = await octokit.rest.git.getBlob({
     owner,
@@ -136,7 +165,16 @@ export async function ingestGithubRepository(repositoryUrl) {
     recursive: 'true',
   });
 
+  if (treeData.truncated) {
+    throw new ApiError(
+      413,
+      'github_tree_too_large',
+      'GitHub repository tree is too large to ingest at once.'
+    );
+  }
+
   const entries = [];
+  let totalBytes = 0;
 
   for (const treeItem of treeData.tree) {
     if (treeItem.type !== 'blob' || !treeItem.path || !treeItem.sha) {
@@ -147,8 +185,33 @@ export async function ingestGithubRepository(repositoryUrl) {
       continue;
     }
 
+    const parsedPath = getRelativeIngestPath(treeItem.path, pathPrefix);
+
+    if (!isSupportedSourcePath(parsedPath)) {
+      continue;
+    }
+
+    validateTreeItem(treeItem);
+    totalBytes += treeItem.size ?? 0;
+
+    if (entries.length >= MAX_TOTAL_SOURCE_FILES) {
+      throw new ApiError(
+        413,
+        'too_many_source_files',
+        'GitHub repository contains too many source files.'
+      );
+    }
+
+    if (totalBytes > MAX_TOTAL_SOURCE_BYTES) {
+      throw new ApiError(
+        413,
+        'codebase_too_large',
+        'GitHub repository exceeds the total source size limit.'
+      );
+    }
+
     entries.push({
-      path: pathPrefix ? treeItem.path.slice(pathPrefix.length).replace(/^\/+/, '') : treeItem.path,
+      path: parsedPath,
       buffer: await fetchBlobBuffer(owner, repo, treeItem.sha),
     });
   }
