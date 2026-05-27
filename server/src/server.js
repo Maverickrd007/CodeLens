@@ -1,12 +1,26 @@
 import app from './app.js';
+import { connectDatabase, disconnectDatabase } from './config/database.js';
 import { env } from './config/env.js';
 
-const server = app.listen(env.port, () => {
-  console.log(`CodeLens API listening on port ${env.port}`);
-});
+let server;
+
+try {
+  await connectDatabase();
+
+  server = app.listen(env.port, () => {
+    console.log(`CodeLens API listening on port ${env.port}`);
+  });
+} catch (error) {
+  console.error('Failed to start CodeLens API.', error);
+  process.exit(1);
+}
 
 function shutdown(signal) {
   console.log(`${signal} received. Shutting down CodeLens API.`);
+
+  if (!server) {
+    process.exit(0);
+  }
 
   server.close((error) => {
     if (error) {
@@ -14,7 +28,12 @@ function shutdown(signal) {
       process.exit(1);
     }
 
-    process.exit(0);
+    disconnectDatabase()
+      .then(() => process.exit(0))
+      .catch((disconnectError) => {
+        console.error('Error while disconnecting from MongoDB.', disconnectError);
+        process.exit(1);
+      });
   });
 }
 
