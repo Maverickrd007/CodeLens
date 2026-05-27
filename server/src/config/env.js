@@ -21,6 +21,8 @@ export const env = {
   port: parsePort(process.env.PORT),
   clientOrigin: process.env.CLIENT_ORIGIN ?? 'http://localhost:5173',
   mongoUri: process.env.MONGODB_URI ?? 'mongodb://127.0.0.1:27017/codelens',
+  jwtAccessSecret: process.env.JWT_ACCESS_SECRET,
+  jwtAccessExpiresIn: process.env.JWT_ACCESS_EXPIRES_IN ?? '15m',
 };
 
 export const isProduction = env.nodeEnv === 'production';
