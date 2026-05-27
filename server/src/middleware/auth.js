@@ -1,5 +1,9 @@
 import { User } from '../models/User.js';
-import { verifyAccessToken } from '../services/tokenService.js';
+import {
+  isAccessTokenExpiredError,
+  isAccessTokenVerificationError,
+  verifyAccessToken,
+} from '../services/tokenService.js';
 import { ApiError } from '../utils/ApiError.js';
 
 function getBearerToken(req) {
@@ -36,6 +40,16 @@ export async function requireAuth(req, _res, next) {
     req.user = user;
     next();
   } catch (error) {
+    if (isAccessTokenExpiredError(error)) {
+      next(new ApiError(401, 'access_token_expired', 'Access token has expired.'));
+      return;
+    }
+
+    if (isAccessTokenVerificationError(error)) {
+      next(new ApiError(401, 'invalid_token', 'Access token is invalid.'));
+      return;
+    }
+
     next(error);
   }
 }

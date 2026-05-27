@@ -35,6 +35,14 @@ export function verifyAccessToken(token) {
   });
 }
 
+export function isAccessTokenExpiredError(error) {
+  return error?.name === 'TokenExpiredError';
+}
+
+export function isAccessTokenVerificationError(error) {
+  return error?.name === 'JsonWebTokenError' || error?.name === 'NotBeforeError';
+}
+
 export function createRefreshToken() {
   return crypto.randomBytes(64).toString('base64url');
 }
