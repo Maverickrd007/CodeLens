@@ -23,10 +23,52 @@ async function postJson(path, body) {
   return parseResponse(response);
 }
 
+async function authorizedRequest(path, { token, method = 'GET', body, headers = {} }) {
+  const response = await fetch(`${API_BASE_URL}${path}`, {
+    method,
+    headers: {
+      Authorization: `Bearer ${token}`,
+      ...headers,
+    },
+    body,
+  });
+
+  return parseResponse(response);
+}
+
 export async function login(credentials) {
   return postJson('/auth/login', credentials);
 }
 
 export async function register(details) {
   return postJson('/auth/register', details);
+}
+
+export async function uploadCodebase({ token, archive, files }) {
+  const formData = new FormData();
+
+  if (archive) {
+    formData.append('archive', archive);
+  } else {
+    files.forEach((file) => {
+      formData.append('files', file, file.webkitRelativePath || file.name);
+    });
+  }
+
+  return authorizedRequest('/codebases/upload', {
+    token,
+    method: 'POST',
+    body: formData,
+  });
+}
+
+export async function ingestGithubCodebase({ token, repositoryUrl }) {
+  return authorizedRequest('/codebases/github', {
+    token,
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ repositoryUrl }),
+  });
 }
