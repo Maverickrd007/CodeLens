@@ -1,29 +1,26 @@
-import { Bot, Loader2, Send, Sparkles, User } from 'lucide-react';
+import {
+  BookOpen,
+  Bot,
+  Bug,
+  FlaskConical,
+  GitFork,
+  Loader2,
+  Send,
+  Sparkles,
+  User,
+} from 'lucide-react';
 import { useMemo, useState } from 'react';
 
+import { ResponsePanel } from './ResponsePanel.jsx';
 import { askCodebase } from '../services/api.js';
 import { getStoredAuth } from '../services/authStorage.js';
 
 const TASK_OPTIONS = [
-  { value: 'file_explanation', label: 'File' },
-  { value: 'architecture_summary', label: 'Architecture' },
+  { value: 'file_explanation', label: 'Docs', icon: BookOpen },
+  { value: 'architecture_summary', label: 'Architecture', icon: GitFork },
+  { value: 'test_generation', label: 'Tests', icon: FlaskConical },
+  { value: 'bug_detection', label: 'Bugs', icon: Bug },
 ];
-
-function getAnswerTitle(answer) {
-  if (answer.kind === 'architecture_summary') {
-    return 'Architecture summary';
-  }
-
-  if (answer.kind === 'file_explanation') {
-    return 'File explanation';
-  }
-
-  return 'AI response';
-}
-
-function getAnswerText(answer) {
-  return answer.summary ?? answer.overview ?? 'Response completed.';
-}
 
 function MessageBubble({ message }) {
   const isUser = message.role === 'user';
@@ -45,10 +42,9 @@ function MessageBubble({ message }) {
           <p>{message.content}</p>
         ) : (
           <>
-            <p className="font-semibold text-slate-950">{getAnswerTitle(message.answer)}</p>
-            <p className="mt-1">{getAnswerText(message.answer)}</p>
+            <ResponsePanel answer={message.answer} />
             {message.filesUsed?.length ? (
-              <p className="mt-2 text-xs text-slate-500">
+              <p className="mt-3 border-t border-slate-200 pt-2 text-xs text-slate-500">
                 {message.filesUsed.length} file context item(s)
               </p>
             ) : null}
@@ -72,9 +68,11 @@ export function ChatPanel({ codebase, selectedFile }) {
   const [error, setError] = useState('');
 
   const selectedFilePath = selectedFile?.path;
-  const canAsk = question.trim() && (task !== 'file_explanation' || selectedFilePath);
+  const isSelectedFileTask =
+    task === 'file_explanation' || task === 'test_generation' || task === 'bug_detection';
+  const canAsk = question.trim() && (!isSelectedFileTask || selectedFilePath);
   const helperText = useMemo(() => {
-    if (task === 'file_explanation') {
+    if (task === 'file_explanation' || task === 'test_generation' || task === 'bug_detection') {
       return selectedFilePath ? `Focused on ${selectedFilePath}` : 'Select a file to ask about it.';
     }
 
@@ -111,7 +109,7 @@ export function ChatPanel({ codebase, selectedFile }) {
         task,
         question: userMessage.content,
         codebase,
-        selectedFilePath: task === 'file_explanation' ? selectedFilePath : undefined,
+        selectedFilePath: isSelectedFileTask ? selectedFilePath : undefined,
       });
 
       setMessages((current) => [
@@ -148,12 +146,13 @@ export function ChatPanel({ codebase, selectedFile }) {
               key={option.value}
               type="button"
               onClick={() => setTask(option.value)}
-              className={`rounded-md border px-3 py-2 text-sm font-medium transition ${
+              className={`inline-flex items-center justify-center gap-2 rounded-md border px-3 py-2 text-sm font-medium transition ${
                 task === option.value
                   ? 'border-slate-950 bg-slate-950 text-white'
                   : 'border-slate-200 bg-white text-slate-600 hover:text-slate-950'
               }`}
             >
+              <option.icon size={15} aria-hidden="true" />
               {option.label}
             </button>
           ))}
