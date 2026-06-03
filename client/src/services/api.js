@@ -72,3 +72,19 @@ export async function ingestGithubCodebase({ token, repositoryUrl }) {
     body: JSON.stringify({ repositoryUrl }),
   });
 }
+
+export async function askCodebase({ token, task, question, codebase, selectedFilePath }) {
+  return authorizedRequest('/ai/ask', {
+    token,
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      task,
+      question,
+      codebase,
+      selectedFilePath,
+    }),
+  });
+}
