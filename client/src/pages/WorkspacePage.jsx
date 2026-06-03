@@ -1,31 +1,37 @@
 import { useState } from 'react';
 
+import { FileExplorerSidebar } from '../components/FileExplorerSidebar.jsx';
+import { FilePreview } from '../components/FilePreview.jsx';
 import { UploadPanel } from '../components/UploadPanel.jsx';
 
 export function WorkspacePage() {
   const [codebase, setCodebase] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  function handleCodebaseReady(nextCodebase) {
+    setCodebase(nextCodebase);
+    setSelectedFile(nextCodebase.files.find((file) => !file.isBinary) ?? null);
+  }
+
+  function resetCodebase() {
+    setCodebase(null);
+    setSelectedFile(null);
+  }
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
       {codebase ? (
-        <section className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
-          <p className="text-sm font-medium text-slate-500">Loaded codebase</p>
-          <h1 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950">
-            {codebase.metadata?.repository ?? codebase.metadata?.archiveName ?? 'Local folder'}
-          </h1>
-          <p className="mt-2 text-sm text-slate-600">
-            {codebase.summary.totalFiles} files ready for exploration.
-          </p>
-          <button
-            type="button"
-            onClick={() => setCodebase(null)}
-            className="mt-5 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-600 transition hover:text-slate-950"
-          >
-            Choose another repository
-          </button>
+        <section className="grid h-[calc(100vh-7rem)] overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm lg:grid-cols-[320px_minmax(0,1fr)]">
+          <FileExplorerSidebar
+            codebase={codebase}
+            selectedFile={selectedFile}
+            onSelectFile={setSelectedFile}
+            onResetCodebase={resetCodebase}
+          />
+          <FilePreview file={selectedFile} />
         </section>
       ) : (
-        <UploadPanel onCodebaseReady={setCodebase} />
+        <UploadPanel onCodebaseReady={handleCodebaseReady} />
       )}
     </main>
   );
