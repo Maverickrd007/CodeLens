@@ -93,7 +93,7 @@ export function FileExplorerSidebar({ codebase, selectedFile, onSelectFile, onRe
   );
 
   return (
-    <aside className="flex min-h-0 flex-col border-r border-slate-200 bg-white">
+    <aside className="flex max-h-80 min-h-0 flex-col border-b border-slate-200 bg-white lg:max-h-none lg:border-b-0 lg:border-r">
       <div className="border-b border-slate-200 p-4">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">

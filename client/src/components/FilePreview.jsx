@@ -3,7 +3,7 @@ import { FileCode2 } from 'lucide-react';
 export function FilePreview({ file }) {
   if (!file) {
     return (
-      <section className="grid min-h-80 place-items-center bg-white">
+      <section className="grid min-h-72 place-items-center bg-white lg:min-h-0">
         <div className="text-center">
           <FileCode2 className="mx-auto text-slate-300" size={42} aria-hidden="true" />
           <p className="mt-3 text-sm font-medium text-slate-700">Select a file</p>
@@ -13,7 +13,7 @@ export function FilePreview({ file }) {
   }
 
   return (
-    <section className="flex min-h-0 flex-1 flex-col bg-white">
+    <section className="flex min-h-[420px] flex-col bg-white lg:min-h-0">
       <header className="flex h-14 shrink-0 items-center justify-between border-b border-slate-200 px-4">
         <div className="min-w-0">
           <h2 className="truncate text-sm font-semibold text-slate-950">{file.path}</h2>

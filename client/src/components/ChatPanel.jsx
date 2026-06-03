@@ -34,7 +34,7 @@ function MessageBubble({ message }) {
         </span>
       ) : null}
       <div
-        className={`max-w-[88%] rounded-lg px-3 py-2 text-sm leading-6 ${
+        className={`max-w-[min(88%,42rem)] rounded-lg px-3 py-2 text-sm leading-6 ${
           isUser ? 'bg-slate-950 text-white' : 'border border-slate-200 bg-white text-slate-700'
         }`}
       >
@@ -129,7 +129,7 @@ export function ChatPanel({ codebase, selectedFile }) {
   }
 
   return (
-    <section className="flex min-h-0 flex-col border-l border-slate-200 bg-slate-50">
+    <section className="flex min-h-[540px] flex-col border-t border-slate-200 bg-slate-50 lg:min-h-0 lg:border-l lg:border-t-0">
       <header className="border-b border-slate-200 bg-white p-4">
         <div className="flex items-center gap-2">
           <span className="grid size-8 place-items-center rounded-md bg-cyan-100 text-cyan-700">
@@ -140,7 +140,7 @@ export function ChatPanel({ codebase, selectedFile }) {
             <p className="text-xs text-slate-500">{helperText}</p>
           </div>
         </div>
-        <div className="mt-4 grid grid-cols-2 gap-2">
+        <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-2">
           {TASK_OPTIONS.map((option) => (
             <button
               key={option.value}
@@ -159,7 +159,7 @@ export function ChatPanel({ codebase, selectedFile }) {
         </div>
       </header>
 
-      <div className="min-h-0 flex-1 space-y-4 overflow-auto p-4">
+      <div className="min-h-0 flex-1 space-y-4 overflow-auto p-3 sm:p-4">
         {messages.length ? (
           messages.map((message) => <MessageBubble key={message.id} message={message} />)
         ) : (
@@ -169,7 +169,7 @@ export function ChatPanel({ codebase, selectedFile }) {
         )}
       </div>
 
-      <form onSubmit={handleSubmit} className="border-t border-slate-200 bg-white p-4">
+      <form onSubmit={handleSubmit} className="border-t border-slate-200 bg-white p-3 sm:p-4">
         {error ? (
           <p className="mb-3 rounded-md border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">
             {error}

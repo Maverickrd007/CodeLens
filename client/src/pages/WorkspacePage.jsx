@@ -22,7 +22,7 @@ export function WorkspacePage() {
   return (
     <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
       {codebase ? (
-        <section className="grid h-[calc(100vh-7rem)] overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm lg:grid-cols-[300px_minmax(0,1fr)_380px]">
+        <section className="flex flex-col overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm lg:grid lg:h-[calc(100vh-7rem)] lg:grid-cols-[300px_minmax(0,1fr)_380px]">
           <FileExplorerSidebar
             codebase={codebase}
             selectedFile={selectedFile}
