@@ -34,3 +34,11 @@ export function formatCodebaseSummaryForPrompt(summary) {
     `Languages: ${languages || 'Unknown'}`,
   ].join('\n');
 }
+
+export function formatFilesForPrompt(files) {
+  if (!Array.isArray(files) || files.length === 0) {
+    return 'No source files were provided.';
+  }
+
+  return files.map((file, index) => `File ${index + 1}\n${formatFileForPrompt(file)}`).join('\n\n');
+}
