@@ -1,8 +1,15 @@
 import { buildArchitectureSummaryPrompt } from '../prompts/architectureSummaryPrompt.js';
+import { buildBugDetectionPrompt } from '../prompts/bugDetectionPrompt.js';
 import { buildFileExplanationPrompt } from '../prompts/fileExplanationPrompt.js';
+import { buildTestGenerationPrompt } from '../prompts/testGenerationPrompt.js';
 import { ApiError } from '../utils/ApiError.js';
 
-const SUPPORTED_TASKS = new Set(['file_explanation', 'architecture_summary']);
+const SUPPORTED_TASKS = new Set([
+  'file_explanation',
+  'architecture_summary',
+  'test_generation',
+  'bug_detection',
+]);
 
 function normalizeTask(task) {
   const normalizedTask = String(task ?? 'file_explanation').trim();
@@ -110,6 +117,18 @@ export function normalizeAiRequestContext(body) {
     };
   }
 
+  if ((task === 'test_generation' || task === 'bug_detection') && selectedFilePath) {
+    const selectedFile = getSelectedFile(files, selectedFilePath);
+
+    return {
+      task,
+      question,
+      files: [selectedFile],
+      filesUsed: [selectedFile.path],
+      codebaseSummary: getCodebaseSummary(body),
+    };
+  }
+
   return {
     task,
     question,
@@ -130,6 +149,22 @@ export function buildPromptForTask(context) {
 
   if (context.task === 'architecture_summary') {
     return buildArchitectureSummaryPrompt({
+      question: context.question,
+      files: context.files,
+      codebaseSummary: context.codebaseSummary,
+    });
+  }
+
+  if (context.task === 'test_generation') {
+    return buildTestGenerationPrompt({
+      question: context.question,
+      files: context.files,
+      codebaseSummary: context.codebaseSummary,
+    });
+  }
+
+  if (context.task === 'bug_detection') {
+    return buildBugDetectionPrompt({
       question: context.question,
       files: context.files,
       codebaseSummary: context.codebaseSummary,
