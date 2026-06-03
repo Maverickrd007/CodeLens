@@ -6,7 +6,9 @@
   "description": "AI-powered codebase assistant for exploring and reasoning about software projects.",
   "scripts": {
     "dev": "npm run dev:server",
+    "dev:client": "npm run dev --workspace @codelens/client",
     "dev:server": "npm run dev --workspace @codelens/server",
+    "build:client": "npm run build --workspace @codelens/client",
     "start:server": "npm run start --workspace @codelens/server",
     "lint": "eslint .",
     "format": "prettier . --write",
