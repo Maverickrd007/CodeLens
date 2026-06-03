@@ -64,6 +64,16 @@ export const env = {
     process.env.OPENAI_MAX_OUTPUT_TOKENS,
     'OPENAI_MAX_OUTPUT_TOKENS'
   ),
+  aiMaxFileChunkChars: parsePositiveInteger(
+    process.env.AI_MAX_FILE_CHUNK_CHARS,
+    6000,
+    'AI_MAX_FILE_CHUNK_CHARS'
+  ),
+  aiMaxContextChars: parsePositiveInteger(
+    process.env.AI_MAX_CONTEXT_CHARS,
+    36000,
+    'AI_MAX_CONTEXT_CHARS'
+  ),
   refreshTokenExpiresInDays: parsePositiveInteger(
     process.env.REFRESH_TOKEN_EXPIRES_IN_DAYS,
     30,

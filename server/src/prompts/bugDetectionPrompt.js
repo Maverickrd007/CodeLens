@@ -1,4 +1,8 @@
-import { formatCodebaseSummaryForPrompt, formatFilesForPrompt } from './promptUtils.js';
+import {
+  formatCodebaseSummaryForPrompt,
+  formatContextOmissionsForPrompt,
+  formatFilesForPrompt,
+} from './promptUtils.js';
 
 export const BUG_DETECTION_SCHEMA = {
   type: 'object',
@@ -60,7 +64,7 @@ export const BUG_DETECTION_SCHEMA = {
   },
 };
 
-export function buildBugDetectionPrompt({ question, files, codebaseSummary }) {
+export function buildBugDetectionPrompt({ question, files, codebaseSummary, omittedContext }) {
   return {
     schemaName: 'bug_detection',
     schema: BUG_DETECTION_SCHEMA,
@@ -81,6 +85,9 @@ export function buildBugDetectionPrompt({ question, files, codebaseSummary }) {
       '',
       'Source files:',
       formatFilesForPrompt(files),
+      '',
+      'Omitted context:',
+      formatContextOmissionsForPrompt(omittedContext),
     ].join('\n'),
   };
 }

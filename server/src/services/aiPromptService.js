@@ -3,6 +3,7 @@ import { buildBugDetectionPrompt } from '../prompts/bugDetectionPrompt.js';
 import { buildFileExplanationPrompt } from '../prompts/fileExplanationPrompt.js';
 import { buildTestGenerationPrompt } from '../prompts/testGenerationPrompt.js';
 import { ApiError } from '../utils/ApiError.js';
+import { chunkFilesForContext } from './contextChunkService.js';
 
 const SUPPORTED_TASKS = new Set([
   'file_explanation',
@@ -98,6 +99,21 @@ function getSelectedFile(files, selectedFilePath) {
   );
 }
 
+function getUniqueOriginalPaths(files) {
+  return Array.from(new Set(files.map((file) => file.originalPath ?? file.path)));
+}
+
+function preparePromptContext(files) {
+  const chunkedContext = chunkFilesForContext(files);
+
+  return {
+    files: chunkedContext.files,
+    filesUsed: getUniqueOriginalPaths(chunkedContext.files),
+    omittedContext: chunkedContext.omittedContext,
+    contextCharacters: chunkedContext.contextCharacters,
+  };
+}
+
 export function normalizeAiRequestContext(body) {
   const task = normalizeTask(body.task);
   const question = normalizeQuestion(body.question);
@@ -106,34 +122,35 @@ export function normalizeAiRequestContext(body) {
 
   if (task === 'file_explanation') {
     const selectedFile = getSelectedFile(files, selectedFilePath);
+    const promptContext = preparePromptContext([selectedFile]);
 
     return {
       task,
       question,
       selectedFile,
-      files: [selectedFile],
-      filesUsed: [selectedFile.path],
+      ...promptContext,
       codebaseSummary: getCodebaseSummary(body),
     };
   }
 
   if ((task === 'test_generation' || task === 'bug_detection') && selectedFilePath) {
     const selectedFile = getSelectedFile(files, selectedFilePath);
+    const promptContext = preparePromptContext([selectedFile]);
 
     return {
       task,
       question,
-      files: [selectedFile],
-      filesUsed: [selectedFile.path],
+      ...promptContext,
       codebaseSummary: getCodebaseSummary(body),
     };
   }
 
+  const promptContext = preparePromptContext(files);
+
   return {
     task,
     question,
-    files,
-    filesUsed: files.map((file) => file.path),
+    ...promptContext,
     codebaseSummary: getCodebaseSummary(body),
   };
 }
@@ -142,8 +159,9 @@ export function buildPromptForTask(context) {
   if (context.task === 'file_explanation') {
     return buildFileExplanationPrompt({
       question: context.question,
-      file: context.selectedFile,
+      files: context.files,
       codebaseSummary: context.codebaseSummary,
+      omittedContext: context.omittedContext,
     });
   }
 
@@ -152,6 +170,7 @@ export function buildPromptForTask(context) {
       question: context.question,
       files: context.files,
       codebaseSummary: context.codebaseSummary,
+      omittedContext: context.omittedContext,
     });
   }
 
@@ -160,6 +179,7 @@ export function buildPromptForTask(context) {
       question: context.question,
       files: context.files,
       codebaseSummary: context.codebaseSummary,
+      omittedContext: context.omittedContext,
     });
   }
 
@@ -168,6 +188,7 @@ export function buildPromptForTask(context) {
       question: context.question,
       files: context.files,
       codebaseSummary: context.codebaseSummary,
+      omittedContext: context.omittedContext,
     });
   }
 

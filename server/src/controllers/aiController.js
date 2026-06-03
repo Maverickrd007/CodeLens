@@ -11,6 +11,8 @@ export async function askCodebase(req, res) {
     answer,
     context: {
       filesUsed: context.filesUsed,
+      omittedContext: context.omittedContext,
+      contextCharacters: context.contextCharacters,
     },
   });
 }

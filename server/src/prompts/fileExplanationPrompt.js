@@ -1,4 +1,8 @@
-import { formatCodebaseSummaryForPrompt, formatFileForPrompt } from './promptUtils.js';
+import {
+  formatCodebaseSummaryForPrompt,
+  formatContextOmissionsForPrompt,
+  formatFilesForPrompt,
+} from './promptUtils.js';
 
 export const FILE_EXPLANATION_SCHEMA = {
   type: 'object',
@@ -80,7 +84,7 @@ export const FILE_EXPLANATION_SCHEMA = {
   },
 };
 
-export function buildFileExplanationPrompt({ question, file, codebaseSummary }) {
+export function buildFileExplanationPrompt({ question, files, codebaseSummary, omittedContext }) {
   return {
     schemaName: 'file_explanation',
     schema: FILE_EXPLANATION_SCHEMA,
@@ -98,8 +102,11 @@ export function buildFileExplanationPrompt({ question, file, codebaseSummary }) 
       'Codebase summary:',
       formatCodebaseSummaryForPrompt(codebaseSummary),
       '',
-      'Selected file:',
-      formatFileForPrompt(file),
+      'Selected file context:',
+      formatFilesForPrompt(files),
+      '',
+      'Omitted context:',
+      formatContextOmissionsForPrompt(omittedContext),
     ].join('\n'),
   };
 }

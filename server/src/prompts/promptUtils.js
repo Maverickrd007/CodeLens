@@ -4,16 +4,18 @@ function formatLanguage(language) {
 
 export function formatFileForPrompt(file) {
   const content = typeof file.content === 'string' ? file.content : '';
-
-  return [
+  const details = [
     `Path: ${file.path}`,
+    file.originalPath && file.originalPath !== file.path
+      ? `Original path: ${file.originalPath}`
+      : null,
     `Language: ${formatLanguage(file.language)}`,
     `Size: ${file.size ?? content.length} bytes`,
-    '',
-    '```',
-    content,
-    '```',
-  ].join('\n');
+    file.chunk ? `Chunk: ${file.chunk.index} of ${file.chunk.total}` : null,
+    file.contextNote ? `Context note: ${file.contextNote}` : null,
+  ].filter(Boolean);
+
+  return [...details, '', '```', content, '```'].join('\n');
 }
 
 export function formatCodebaseSummaryForPrompt(summary) {
@@ -41,4 +43,17 @@ export function formatFilesForPrompt(files) {
   }
 
   return files.map((file, index) => `File ${index + 1}\n${formatFileForPrompt(file)}`).join('\n\n');
+}
+
+export function formatContextOmissionsForPrompt(omittedContext) {
+  if (!Array.isArray(omittedContext) || omittedContext.length === 0) {
+    return 'No source context was omitted.';
+  }
+
+  return omittedContext
+    .map(
+      (item) =>
+        `${item.path}: ${item.omittedChunks} omitted chunk(s), ${item.omittedCharacters} omitted characters`
+    )
+    .join('\n');
 }

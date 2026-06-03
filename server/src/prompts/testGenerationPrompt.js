@@ -1,4 +1,8 @@
-import { formatCodebaseSummaryForPrompt, formatFilesForPrompt } from './promptUtils.js';
+import {
+  formatCodebaseSummaryForPrompt,
+  formatContextOmissionsForPrompt,
+  formatFilesForPrompt,
+} from './promptUtils.js';
 
 export const TEST_GENERATION_SCHEMA = {
   type: 'object',
@@ -72,7 +76,7 @@ export const TEST_GENERATION_SCHEMA = {
   },
 };
 
-export function buildTestGenerationPrompt({ question, files, codebaseSummary }) {
+export function buildTestGenerationPrompt({ question, files, codebaseSummary, omittedContext }) {
   return {
     schemaName: 'test_generation',
     schema: TEST_GENERATION_SCHEMA,
@@ -94,6 +98,9 @@ export function buildTestGenerationPrompt({ question, files, codebaseSummary }) 
       '',
       'Source files:',
       formatFilesForPrompt(files),
+      '',
+      'Omitted context:',
+      formatContextOmissionsForPrompt(omittedContext),
     ].join('\n'),
   };
 }

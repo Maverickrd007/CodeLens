@@ -1,4 +1,8 @@
-import { formatCodebaseSummaryForPrompt, formatFilesForPrompt } from './promptUtils.js';
+import {
+  formatCodebaseSummaryForPrompt,
+  formatContextOmissionsForPrompt,
+  formatFilesForPrompt,
+} from './promptUtils.js';
 
 export const ARCHITECTURE_SUMMARY_SCHEMA = {
   type: 'object',
@@ -85,7 +89,12 @@ export const ARCHITECTURE_SUMMARY_SCHEMA = {
   },
 };
 
-export function buildArchitectureSummaryPrompt({ question, files, codebaseSummary }) {
+export function buildArchitectureSummaryPrompt({
+  question,
+  files,
+  codebaseSummary,
+  omittedContext,
+}) {
   return {
     schemaName: 'architecture_summary',
     schema: ARCHITECTURE_SUMMARY_SCHEMA,
@@ -106,6 +115,9 @@ export function buildArchitectureSummaryPrompt({ question, files, codebaseSummar
       '',
       'Source files:',
       formatFilesForPrompt(files),
+      '',
+      'Omitted context:',
+      formatContextOmissionsForPrompt(omittedContext),
     ].join('\n'),
   };
 }
