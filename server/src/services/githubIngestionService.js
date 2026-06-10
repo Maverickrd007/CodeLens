@@ -12,7 +12,7 @@ import { ApiError } from '../utils/ApiError.js';
 import { parseBufferEntries } from './fileTreeService.js';
 
 const octokit = new Octokit({
-  auth: env.githubToken,
+  ...(env.githubToken ? { auth: env.githubToken } : {}),
   userAgent: 'codelens-api/0.1.0',
 });
 
