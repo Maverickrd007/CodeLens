@@ -11,6 +11,7 @@ export async function createSession(req, res) {
     await session.save();
     res.status(201).json({ session });
   } catch (error) {
+    console.error('createSession error:', error);
     res.status(500).json({ error: 'Failed to create session' });
   }
 }
@@ -22,6 +23,7 @@ export async function getSessions(req, res) {
       .sort({ updatedAt: -1 });
     res.status(200).json({ sessions });
   } catch (error) {
+    console.error('getSessions error:', error);
     res.status(500).json({ error: 'Failed to fetch sessions' });
   }
 }
@@ -34,6 +36,7 @@ export async function getSession(req, res) {
     }
     res.status(200).json({ session });
   } catch (error) {
+    console.error('getSession error:', error);
     res.status(500).json({ error: 'Failed to fetch session' });
   }
 }
@@ -51,6 +54,7 @@ export async function updateSession(req, res) {
     }
     res.status(200).json({ session });
   } catch (error) {
+    console.error('updateSession error:', error);
     res.status(500).json({ error: 'Failed to update session' });
   }
 }
@@ -63,6 +67,7 @@ export async function deleteSession(req, res) {
     }
     res.status(200).json({ message: 'Session deleted successfully' });
   } catch (error) {
+    console.error('deleteSession error:', error);
     res.status(500).json({ error: 'Failed to delete session' });
   }
 }
@@ -81,6 +86,7 @@ export async function addMessage(req, res) {
     
     res.status(200).json({ session });
   } catch (error) {
+    console.error('addMessage error:', error);
     res.status(500).json({ error: 'Failed to add message' });
   }
 }

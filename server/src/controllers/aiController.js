@@ -1,5 +1,5 @@
 import { buildPromptForTask, normalizeAiRequestContext } from '../services/aiPromptService.js';
-import { createStructuredResponse } from '../services/openaiService.js';
+import { createStructuredResponse } from '../services/geminiService.js';
 
 export async function askCodebase(req, res) {
   const context = normalizeAiRequestContext(req.body);

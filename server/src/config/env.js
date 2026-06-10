@@ -52,17 +52,17 @@ export const env = {
   jwtAccessSecret: process.env.JWT_ACCESS_SECRET,
   jwtAccessExpiresIn: process.env.JWT_ACCESS_EXPIRES_IN ?? '15m',
   githubToken: process.env.GITHUB_TOKEN,
-  openaiApiKey: process.env.OPENAI_API_KEY,
-  openaiModel: process.env.OPENAI_MODEL ?? 'gpt-4o',
-  openaiMaxRetries: parsePositiveInteger(process.env.OPENAI_MAX_RETRIES, 2, 'OPENAI_MAX_RETRIES'),
-  openaiRequestTimeoutMs: parsePositiveInteger(
-    process.env.OPENAI_REQUEST_TIMEOUT_MS,
+  geminiApiKey: process.env.GEMINI_API_KEY,
+  geminiModel: process.env.GEMINI_MODEL ?? 'gemini-2.5-flash',
+  geminiMaxRetries: parsePositiveInteger(process.env.GEMINI_MAX_RETRIES, 2, 'GEMINI_MAX_RETRIES'),
+  geminiRequestTimeoutMs: parsePositiveInteger(
+    process.env.GEMINI_REQUEST_TIMEOUT_MS,
     60000,
-    'OPENAI_REQUEST_TIMEOUT_MS'
+    'GEMINI_REQUEST_TIMEOUT_MS'
   ),
-  openaiMaxOutputTokens: parseOptionalPositiveInteger(
-    process.env.OPENAI_MAX_OUTPUT_TOKENS,
-    'OPENAI_MAX_OUTPUT_TOKENS'
+  geminiMaxOutputTokens: parseOptionalPositiveInteger(
+    process.env.GEMINI_MAX_OUTPUT_TOKENS,
+    'GEMINI_MAX_OUTPUT_TOKENS'
   ),
   aiMaxFileChunkChars: parsePositiveInteger(
     process.env.AI_MAX_FILE_CHUNK_CHARS,
