@@ -1,0 +1,47 @@
+version: '3.8'
+services:
+  mongodb:
+    image: mongo:6
+    container_name: codelens-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - codelens-mongo-data:/data/db
+    restart: unless-stopped
+
+  server:
+    build:
+      context: ./server
+    container_name: codelens-server
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=development
+      - PORT=5000
+      - CLIENT_ORIGIN=http://localhost:5173
+      - MONGODB_URI=mongodb://mongodb:27017/codelens
+      - JWT_ACCESS_SECRET=dev_secret
+    depends_on:
+      - mongodb
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    restart: unless-stopped
+
+  client:
+    build:
+      context: ./client
+    container_name: codelens-client
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:5000
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    depends_on:
+      - server
+    restart: unless-stopped
+
+volumes:
+  codelens-mongo-data:
