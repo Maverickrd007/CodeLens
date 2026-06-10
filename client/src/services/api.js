@@ -88,3 +88,45 @@ export async function askCodebase({ token, task, question, codebase, selectedFil
     }),
   });
 }
+
+export async function fetchSessions({ token }) {
+  return authorizedRequest('/sessions', { token });
+}
+
+export async function createSession({ token, title }) {
+  return authorizedRequest('/sessions', {
+    token,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ title }),
+  });
+}
+
+export async function fetchSession({ token, sessionId }) {
+  return authorizedRequest(`/sessions/${sessionId}`, { token });
+}
+
+export async function updateSession({ token, sessionId, title }) {
+  return authorizedRequest(`/sessions/${sessionId}`, {
+    token,
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ title }),
+  });
+}
+
+export async function deleteSession({ token, sessionId }) {
+  return authorizedRequest(`/sessions/${sessionId}`, {
+    token,
+    method: 'DELETE',
+  });
+}
+
+export async function addMessageToSession({ token, sessionId, message }) {
+  return authorizedRequest(`/sessions/${sessionId}/messages`, {
+    token,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message }),
+  });
+}

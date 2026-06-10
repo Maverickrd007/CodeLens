@@ -8,6 +8,7 @@ import aiRouter from './routes/ai.js';
 import authRouter from './routes/auth.js';
 import codebaseRouter from './routes/codebases.js';
 import healthRouter from './routes/health.js';
+import sessionsRouter from './routes/sessions.js';
 import { env, isProduction } from './config/env.js';
 
 export function createApp() {
@@ -35,6 +36,7 @@ export function createApp() {
   app.use('/auth', authRouter);
   app.use('/codebases', codebaseRouter);
   app.use('/health', healthRouter);
+  app.use('/sessions', sessionsRouter);
   app.use(notFoundHandler);
   app.use(errorHandler);
 
