@@ -3,11 +3,15 @@ import { useState } from 'react';
 import { ChatPanel } from '../components/ChatPanel.jsx';
 import { FileExplorerSidebar } from '../components/FileExplorerSidebar.jsx';
 import { FilePreview } from '../components/FilePreview.jsx';
+import { SessionHistory } from '../components/SessionHistory.jsx';
 import { UploadPanel } from '../components/UploadPanel.jsx';
+import { fetchSession } from '../services/api.js';
+import { getStoredAuth } from '../services/authStorage.js';
 
 export function WorkspacePage() {
   const [codebase, setCodebase] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [activeSession, setActiveSession] = useState(null);
 
   function handleCodebaseReady(nextCodebase) {
     setCodebase(nextCodebase);
@@ -17,6 +21,19 @@ export function WorkspacePage() {
   function resetCodebase() {
     setCodebase(null);
     setSelectedFile(null);
+    setActiveSession(null);
+  }
+
+  async function handleSelectSession(session) {
+    try {
+      const token = getStoredAuth()?.tokens?.accessToken;
+      const res = await fetchSession({ token, sessionId: session._id });
+      setActiveSession(res.session);
+      // We don't have codebase saved, so just open the chat with the session history
+      setCodebase({ summary: { totalFiles: 0 }, files: [], isHistoryOnly: true });
+    } catch (err) {
+      console.error('Failed to load session details', err);
+    }
   }
 
   return (
@@ -30,10 +47,17 @@ export function WorkspacePage() {
             onResetCodebase={resetCodebase}
           />
           <FilePreview file={selectedFile} />
-          <ChatPanel codebase={codebase} selectedFile={selectedFile} />
+          <ChatPanel 
+            codebase={codebase} 
+            selectedFile={selectedFile} 
+            initialSession={activeSession} 
+          />
         </section>
       ) : (
-        <UploadPanel onCodebaseReady={handleCodebaseReady} />
+        <>
+          <SessionHistory onSelectSession={handleSelectSession} />
+          <UploadPanel onCodebaseReady={handleCodebaseReady} />
+        </>
       )}
     </main>
   );
