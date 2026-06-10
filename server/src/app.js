@@ -5,6 +5,7 @@ import morgan from 'morgan';
 
 import { errorHandler, notFoundHandler } from './middleware/error.js';
 import authRouter from './routes/auth.js';
+import codebaseRouter from './routes/codebases.js';
 import healthRouter from './routes/health.js';
 import { env, isProduction } from './config/env.js';
 
@@ -30,6 +31,7 @@ export function createApp() {
   });
 
   app.use('/auth', authRouter);
+  app.use('/codebases', codebaseRouter);
   app.use('/health', healthRouter);
   app.use(notFoundHandler);
   app.use(errorHandler);
