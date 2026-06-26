@@ -1,4 +1,4 @@
-import { Eye, EyeOff, Loader2, UserPlus, Github, Mail } from 'lucide-react';
+import { Eye, EyeOff, Loader2, UserPlus, Code2, Mail } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -51,7 +51,7 @@ export function RegisterPage() {
           type="button" 
           className="flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-medium text-slate-200 transition-colors hover:bg-white/10"
         >
-          <Github size={18} />
+          <Code2 size={18} />
           GitHub
         </motion.button>
         <motion.button 
