@@ -1,14 +1,12 @@
-import { FolderUp, GitBranch, Loader2, UploadCloud, X } from 'lucide-react';
+import { FolderUp, GitBranch, Loader2, UploadCloud, X, ArrowRight, Code2 } from 'lucide-react';
 import { useRef, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 import { ingestGithubCodebase, uploadCodebase } from '../services/api.js';
 import { getStoredAuth } from '../services/authStorage.js';
 
 function formatFileCount(files) {
-  if (files.length === 0) {
-    return 'No folder files selected';
-  }
-
+  if (files.length === 0) return 'No folder files selected';
   return `${files.length} file${files.length === 1 ? '' : 's'} selected`;
 }
 
@@ -19,7 +17,9 @@ function getZipFile(files) {
 export function UploadPanel({ onCodebaseReady }) {
   const folderInputRef = useRef(null);
   const archiveInputRef = useRef(null);
-  const [mode, setMode] = useState('github');
+  
+  // 'none', 'github', 'folder', 'archive'
+  const [activeAction, setActiveAction] = useState('none'); 
   const [repositoryUrl, setRepositoryUrl] = useState('');
   const [folderFiles, setFolderFiles] = useState([]);
   const [archive, setArchive] = useState(null);
@@ -30,26 +30,20 @@ export function UploadPanel({ onCodebaseReady }) {
   function resetLocalSelection() {
     setFolderFiles([]);
     setArchive(null);
-
-    if (folderInputRef.current) {
-      folderInputRef.current.value = '';
-    }
-
-    if (archiveInputRef.current) {
-      archiveInputRef.current.value = '';
-    }
+    if (folderInputRef.current) folderInputRef.current.value = '';
+    if (archiveInputRef.current) archiveInputRef.current.value = '';
+    setActiveAction('none');
+    setError('');
   }
 
   function handleFolderSelect(event) {
-    setMode('folder');
-    setArchive(null);
     setFolderFiles(Array.from(event.target.files ?? []));
+    setActiveAction('folder');
   }
 
   function handleArchiveSelect(event) {
-    setMode('archive');
-    setFolderFiles([]);
     setArchive(event.target.files?.[0] ?? null);
+    setActiveAction('archive');
   }
 
   function handleDrop(event) {
@@ -60,15 +54,15 @@ export function UploadPanel({ onCodebaseReady }) {
     const zipFile = getZipFile(files);
 
     if (zipFile) {
-      setMode('archive');
       setFolderFiles([]);
       setArchive(zipFile);
+      setActiveAction('archive');
       return;
     }
 
-    setMode('folder');
     setArchive(null);
     setFolderFiles(files);
+    setActiveAction('folder');
   }
 
   async function handleSubmit(event) {
@@ -78,13 +72,10 @@ export function UploadPanel({ onCodebaseReady }) {
 
     try {
       const token = getStoredAuth()?.tokens?.accessToken;
-
-      if (!token) {
-        throw new Error('Your session is missing an access token.');
-      }
+      if (!token) throw new Error('Your session is missing an access token.');
 
       const response =
-        mode === 'github'
+        activeAction === 'github'
           ? await ingestGithubCodebase({ token, repositoryUrl })
           : await uploadCodebase({ token, archive, files: folderFiles });
 
@@ -97,161 +88,185 @@ export function UploadPanel({ onCodebaseReady }) {
   }
 
   const canSubmit =
-    (mode === 'github' && repositoryUrl.trim()) ||
-    (mode === 'archive' && archive) ||
-    (mode === 'folder' && folderFiles.length > 0);
+    (activeAction === 'github' && repositoryUrl.trim()) ||
+    (activeAction === 'archive' && archive) ||
+    (activeAction === 'folder' && folderFiles.length > 0);
+
+  const actionCards = [
+    {
+      id: 'github',
+      title: 'Connect GitHub',
+      description: 'Import a public or private repository directly.',
+      icon: Code2,
+      accent: 'group-hover:text-blue-400',
+      bgHover: 'hover:bg-blue-500/5 hover:border-blue-500/20',
+      onClick: () => setActiveAction('github'),
+    },
+    {
+      id: 'folder',
+      title: 'Upload Folder',
+      description: 'Analyze a local directory from your machine.',
+      icon: FolderUp,
+      accent: 'group-hover:text-cyan-400',
+      bgHover: 'hover:bg-cyan-500/5 hover:border-cyan-500/20',
+      onClick: () => {
+        setActiveAction('folder');
+        folderInputRef.current?.click();
+      },
+    },
+    {
+      id: 'archive',
+      title: 'Upload ZIP',
+      description: 'Upload a compressed codebase archive.',
+      icon: UploadCloud,
+      accent: 'group-hover:text-purple-400',
+      bgHover: 'hover:bg-purple-500/5 hover:border-purple-500/20',
+      onClick: () => {
+        setActiveAction('archive');
+        archiveInputRef.current?.click();
+      },
+    },
+  ];
 
   return (
-    <section className="mx-auto grid w-full max-w-6xl gap-5 lg:grid-cols-[minmax(0,1fr)_360px]">
-      <form
-        onSubmit={handleSubmit}
-        className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm sm:p-6"
-      >
-        <div className="flex flex-wrap items-center gap-2">
-          {[
-            { value: 'github', label: 'GitHub', icon: GitBranch },
-            { value: 'archive', label: 'Zip', icon: UploadCloud },
-            { value: 'folder', label: 'Folder', icon: FolderUp },
-          ].map((item) => {
-            const Icon = item.icon;
-            const isActive = mode === item.value;
+    <div className="w-full">
+      
+      {/* Action Cards Grid */}
+      {activeAction === 'none' ? (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {actionCards.map((card) => (
+            <button
+              key={card.id}
+              onClick={card.onClick}
+              className={`group relative flex flex-col items-start gap-4 rounded-xl border border-white/5 bg-white/[0.02] p-5 text-left transition-all duration-300 ${card.bgHover}`}
+            >
+              <span className={`inline-flex rounded-lg border border-white/5 bg-[#0c0c0e] p-2 text-slate-400 transition-colors shadow-sm ${card.accent}`}>
+                <card.icon size={20} />
+              </span>
+              <div>
+                <h3 className="text-sm font-semibold text-slate-200">{card.title}</h3>
+                <p className="mt-1 text-xs text-slate-400 line-clamp-2">{card.description}</p>
+              </div>
+            </button>
+          ))}
+        </div>
+      ) : (
+        /* Active Form Area */
+        <motion.div 
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="rounded-xl border border-white/10 bg-[#0c0c0e] p-6 shadow-xl"
+        >
+          <div className="flex items-center justify-between mb-6 border-b border-white/5 pb-4">
+            <h3 className="text-base font-medium text-white flex items-center gap-2">
+              {activeAction === 'github' && <><Code2 size={18} className="text-blue-400"/> Connect GitHub</>}
+              {activeAction === 'folder' && <><FolderUp size={18} className="text-cyan-400"/> Upload Folder</>}
+              {activeAction === 'archive' && <><UploadCloud size={18} className="text-purple-400"/> Upload ZIP</>}
+            </h3>
+            <button 
+              onClick={resetLocalSelection}
+              className="text-slate-400 hover:text-white transition rounded-md p-1 hover:bg-white/5"
+            >
+              <X size={18} />
+            </button>
+          </div>
 
-            return (
-              <button
-                key={item.value}
-                type="button"
-                onClick={() => {
-                  setMode(item.value);
-                  setError('');
+          <form onSubmit={handleSubmit}>
+            {activeAction === 'github' ? (
+              <label className="block">
+                <span className="text-[13px] font-medium text-slate-300">Repository URL</span>
+                <input
+                  autoFocus
+                  value={repositoryUrl}
+                  onChange={(event) => setRepositoryUrl(event.target.value)}
+                  placeholder="https://github.com/owner/repo"
+                  className="mt-2 w-full rounded-md border border-white/10 bg-black/20 px-3 py-2.5 text-sm text-white outline-none transition focus:border-white/30 focus:bg-white/[0.02] placeholder:text-slate-600"
+                />
+              </label>
+            ) : (
+              <div
+                onDrop={handleDrop}
+                onDragOver={(event) => {
+                  event.preventDefault();
+                  setIsDragging(true);
                 }}
-                className={`inline-flex items-center gap-2 rounded-md border px-3 py-2 text-sm font-medium transition ${
-                  isActive
-                    ? 'border-slate-950 bg-slate-950 text-white'
-                    : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:text-slate-950'
+                onDragLeave={() => setIsDragging(false)}
+                className={`rounded-lg border border-dashed p-8 text-center transition ${
+                  isDragging ? 'border-cyan-500/50 bg-cyan-500/5' : 'border-white/10 bg-black/20 hover:border-white/20'
                 }`}
               >
-                <Icon size={16} aria-hidden="true" />
-                {item.label}
-              </button>
-            );
-          })}
-        </div>
-
-        <div className="mt-6">
-          {mode === 'github' ? (
-            <label className="block">
-              <span className="text-sm font-medium text-slate-700">GitHub repository URL</span>
-              <input
-                value={repositoryUrl}
-                onChange={(event) => setRepositoryUrl(event.target.value)}
-                placeholder="https://github.com/owner/repo"
-                className="mt-2 w-full rounded-md border border-slate-300 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-100"
-              />
-            </label>
-          ) : (
-            <div
-              onDrop={handleDrop}
-              onDragOver={(event) => {
-                event.preventDefault();
-                setIsDragging(true);
-              }}
-              onDragLeave={() => setIsDragging(false)}
-              className={`rounded-lg border border-dashed p-6 text-center transition ${
-                isDragging ? 'border-cyan-400 bg-cyan-50' : 'border-slate-300 bg-slate-50'
-              }`}
-            >
-              <UploadCloud className="mx-auto text-slate-500" size={32} aria-hidden="true" />
-              <p className="mt-3 text-sm font-medium text-slate-800">
-                {mode === 'archive'
-                  ? archive?.name || 'Drop a zip archive'
-                  : formatFileCount(folderFiles)}
-              </p>
-              <div className="mt-4 flex flex-wrap justify-center gap-2">
-                {mode === 'archive' ? (
-                  <button
-                    type="button"
-                    onClick={() => archiveInputRef.current?.click()}
-                    className="inline-flex items-center gap-2 rounded-md bg-slate-950 px-3 py-2 text-sm font-semibold text-white transition hover:bg-slate-800"
-                  >
-                    <UploadCloud size={16} aria-hidden="true" />
-                    Select zip
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => folderInputRef.current?.click()}
-                    className="inline-flex items-center gap-2 rounded-md bg-slate-950 px-3 py-2 text-sm font-semibold text-white transition hover:bg-slate-800"
-                  >
-                    <FolderUp size={16} aria-hidden="true" />
-                    Select folder
-                  </button>
-                )}
-                <button
-                  type="button"
-                  onClick={resetLocalSelection}
-                  className="inline-flex items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-600 transition hover:text-slate-950"
-                >
-                  <X size={16} aria-hidden="true" />
-                  Clear
-                </button>
+                <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-white/5 mb-4">
+                  <UploadCloud className="text-slate-400" size={24} aria-hidden="true" />
+                </div>
+                <p className="text-sm font-medium text-slate-200">
+                  {activeAction === 'archive'
+                    ? archive?.name || 'Drop your ZIP file here'
+                    : formatFileCount(folderFiles)}
+                </p>
+                <div className="mt-6 flex flex-wrap justify-center gap-3">
+                  {activeAction === 'archive' ? (
+                    <button
+                      type="button"
+                      onClick={() => archiveInputRef.current?.click()}
+                      className="inline-flex items-center gap-2 rounded-md bg-white/[0.05] border border-white/10 px-3 py-2 text-sm font-medium text-slate-200 transition hover:bg-white/[0.08]"
+                    >
+                      Select ZIP
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => folderInputRef.current?.click()}
+                      className="inline-flex items-center gap-2 rounded-md bg-white/[0.05] border border-white/10 px-3 py-2 text-sm font-medium text-slate-200 transition hover:bg-white/[0.08]"
+                    >
+                      Select Folder
+                    </button>
+                  )}
+                </div>
               </div>
-              <input
-                ref={archiveInputRef}
-                type="file"
-                accept=".zip"
-                className="hidden"
-                onChange={handleArchiveSelect}
-              />
-              <input
-                ref={folderInputRef}
-                type="file"
-                multiple
-                webkitdirectory=""
-                directory=""
-                className="hidden"
-                onChange={handleFolderSelect}
-              />
+            )}
+
+            {error ? (
+              <p className="mt-4 rounded-md border border-red-500/20 bg-red-500/10 px-3 py-2 text-sm text-red-400">
+                {error}
+              </p>
+            ) : null}
+
+            <div className="mt-6 flex justify-end">
+              <button
+                type="submit"
+                disabled={!canSubmit || isSubmitting}
+                className="inline-flex items-center justify-center gap-2 rounded-md bg-white px-5 py-2.5 text-sm font-medium text-black transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {isSubmitting ? (
+                  <Loader2 size={16} className="animate-spin" />
+                ) : (
+                  <ArrowRight size={16} />
+                )}
+                Analyze Repository
+              </button>
             </div>
-          )}
-        </div>
+          </form>
+        </motion.div>
+      )}
 
-        {error ? (
-          <p className="mt-4 rounded-md border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">
-            {error}
-          </p>
-        ) : null}
+      {/* Hidden Inputs */}
+      <input
+        ref={archiveInputRef}
+        type="file"
+        accept=".zip"
+        className="hidden"
+        onChange={handleArchiveSelect}
+      />
+      <input
+        ref={folderInputRef}
+        type="file"
+        multiple
+        webkitdirectory=""
+        directory=""
+        className="hidden"
+        onChange={handleFolderSelect}
+      />
 
-        <button
-          type="submit"
-          disabled={!canSubmit || isSubmitting}
-          className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-md bg-cyan-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-cyan-700 disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {isSubmitting ? (
-            <Loader2 size={17} className="animate-spin" />
-          ) : (
-            <UploadCloud size={17} />
-          )}
-          Analyze repository
-        </button>
-      </form>
-
-      <aside className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-        <p className="text-sm font-semibold text-slate-900">Ingestion limits</p>
-        <dl className="mt-4 space-y-4 text-sm">
-          <div>
-            <dt className="text-slate-500">Upload formats</dt>
-            <dd className="font-medium text-slate-900">GitHub URL, zip, or folder files</dd>
-          </div>
-          <div>
-            <dt className="text-slate-500">Source filtering</dt>
-            <dd className="font-medium text-slate-900">Code and config files only</dd>
-          </div>
-          <div>
-            <dt className="text-slate-500">Ignored folders</dt>
-            <dd className="font-medium text-slate-900">node_modules, dist, build, .git</dd>
-          </div>
-        </dl>
-      </aside>
-    </section>
+    </div>
   );
 }
