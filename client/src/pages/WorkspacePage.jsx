@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
-import { User, Zap, Activity } from 'lucide-react';
+import { User, Zap, Activity, LogOut } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 import { ChatPanel } from '../components/ChatPanel.jsx';
 import { FileExplorerSidebar } from '../components/FileExplorerSidebar.jsx';
@@ -7,13 +9,14 @@ import { FilePreview } from '../components/FilePreview.jsx';
 import { SessionHistory } from '../components/SessionHistory.jsx';
 import { UploadPanel } from '../components/UploadPanel.jsx';
 import { fetchSession } from '../services/api.js';
-import { getStoredAuth } from '../services/authStorage.js';
+import { getStoredAuth, clearStoredAuth } from '../services/authStorage.js';
 
 export function WorkspacePage() {
   const [codebase, setCodebase] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [activeSession, setActiveSession] = useState(null);
   const [userName, setUserName] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const auth = getStoredAuth();
@@ -21,6 +24,11 @@ export function WorkspacePage() {
       setUserName(auth.user.name.split(' ')[0]);
     }
   }, []);
+
+  function handleLogout() {
+    clearStoredAuth();
+    navigate('/login', { replace: true });
+  }
 
   function handleCodebaseReady(nextCodebase) {
     setCodebase(nextCodebase);
@@ -44,11 +52,37 @@ export function WorkspacePage() {
     }
   }
 
+  // 3D Animated Gradient Mesh Background Component
+  const AnimatedBackground = () => (
+    <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+      <motion.div 
+        animate={{ 
+          scale: [1, 1.2, 1],
+          rotate: [0, 90, 0],
+          opacity: [0.15, 0.3, 0.15]
+        }}
+        transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+        className="absolute -top-[20%] -left-[10%] w-[70vw] h-[70vw] rounded-full bg-blue-600/20 blur-[120px]" 
+      />
+      <motion.div 
+        animate={{ 
+          scale: [1, 1.5, 1],
+          rotate: [0, -90, 0],
+          opacity: [0.1, 0.25, 0.1]
+        }}
+        transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
+        className="absolute top-[40%] -right-[10%] w-[60vw] h-[60vw] rounded-full bg-purple-600/20 blur-[120px]" 
+      />
+      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.15] mix-blend-overlay"></div>
+    </div>
+  );
+
   if (codebase) {
     return (
-      <main className="min-h-screen bg-[#09090b] text-slate-200">
-        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-          <section className="flex flex-col overflow-hidden rounded-lg border border-white/10 bg-[#0c0c0e] shadow-sm lg:grid lg:h-[calc(100vh-7rem)] lg:grid-cols-[300px_minmax(0,1fr)_380px]">
+      <main className="relative min-h-screen bg-[#09090b] text-slate-200">
+        <AnimatedBackground />
+        <div className="relative z-10 mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+          <section className="flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-black/40 backdrop-blur-xl shadow-2xl lg:grid lg:h-[calc(100vh-7rem)] lg:grid-cols-[300px_minmax(0,1fr)_380px]">
             <FileExplorerSidebar
               codebase={codebase}
               selectedFile={selectedFile}
@@ -68,45 +102,68 @@ export function WorkspacePage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#09090b] text-slate-200 selection:bg-slate-700/50">
+    <main className="relative min-h-screen bg-[#09090b] text-slate-200 selection:bg-cyan-500/30 overflow-hidden font-sans">
+      <AnimatedBackground />
       
       {/* Top Navigation / Header */}
-      <header className="border-b border-white/5 bg-[#0c0c0e]/50 backdrop-blur-md px-6 py-3">
+      <header className="relative z-20 border-b border-white/5 bg-[#0c0c0e]/60 backdrop-blur-2xl px-6 py-4 shadow-sm">
         <div className="mx-auto flex max-w-7xl items-center justify-between">
           <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2">
-              <div className="size-6 rounded bg-white text-black grid place-items-center font-bold text-xs">C</div>
-              <span className="text-sm font-medium text-slate-200">CodeLens</span>
+            <div className="flex items-center gap-3">
+              <span className="grid w-8 h-8 place-items-center rounded-lg bg-gradient-to-br from-slate-800 to-slate-900 border border-white/10 shadow-lg text-cyan-400 font-bold text-sm">
+                C
+              </span>
+              <span className="text-base font-bold text-white tracking-tight">CodeLens</span>
             </div>
-            <div className="h-4 w-px bg-white/10"></div>
+            <div className="h-5 w-px bg-white/10"></div>
             <span className="text-[13px] font-medium text-slate-400">Personal Workspace</span>
           </div>
           <div className="flex items-center gap-4">
-            <div className="hidden items-center gap-1.5 rounded-full border border-white/5 bg-white/[0.02] px-2.5 py-1 text-[11px] font-medium text-slate-400 sm:flex">
-              <Activity size={12} className="text-cyan-500" />
+            <div className="hidden items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[11px] font-medium text-slate-300 sm:flex backdrop-blur-md shadow-sm">
+              <Activity size={14} className="text-cyan-400" />
               <span>Usage: 2/100 API Calls</span>
             </div>
-            <div className="hidden items-center gap-1.5 rounded-full border border-white/5 bg-white/[0.02] px-2.5 py-1 text-[11px] font-medium text-slate-400 sm:flex">
-              <Zap size={12} className="text-amber-500" />
+            <div className="hidden items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[11px] font-medium text-slate-300 sm:flex backdrop-blur-md shadow-sm">
+              <Zap size={14} className="text-amber-400" />
               <span>Free Plan</span>
             </div>
-            <button className="flex items-center justify-center size-8 rounded-full border border-white/10 bg-white/5 text-slate-300 hover:bg-white/10 transition">
-              <User size={14} />
+            <button 
+              onClick={handleLogout}
+              className="flex items-center justify-center w-8 h-8 rounded-full border border-white/10 bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white transition shadow-sm"
+              title="Log out"
+            >
+              <LogOut size={14} />
             </button>
           </div>
         </div>
       </header>
 
-      <div className="mx-auto max-w-7xl px-6 py-10 lg:px-8">
+      <div className="relative z-10 mx-auto max-w-7xl px-6 py-12 lg:px-8">
         {/* Greeting */}
-        <div className="mb-10">
-          <h1 className="text-2xl font-semibold tracking-tight text-white">
+        <div className="mb-12">
+          <motion.h1 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-4xl font-bold tracking-tight text-white"
+          >
             {userName ? `Welcome back, ${userName}.` : 'Welcome back.'}
-          </h1>
-          <p className="mt-1 text-sm text-slate-400">Select a project to start analyzing your codebase.</p>
+          </motion.h1>
+          <motion.p 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="mt-2 text-base text-slate-400"
+          >
+            Select a project to start analyzing your codebase.
+          </motion.p>
         </div>
 
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_340px]"
+        >
           {/* Main Content Area (Upload Panel) */}
           <div className="space-y-8">
             <UploadPanel onCodebaseReady={handleCodebaseReady} />
@@ -116,8 +173,10 @@ export function WorkspacePage() {
           <div className="space-y-6">
             <SessionHistory onSelectSession={handleSelectSession} />
           </div>
-        </div>
+        </motion.div>
       </div>
     </main>
   );
+}
+
 }
