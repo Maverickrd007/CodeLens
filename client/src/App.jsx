@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { AppShell } from './components/AppShell.jsx';
 import { ProtectedRoute } from './components/ProtectedRoute.jsx';
+import { LandingPage } from './pages/LandingPage.jsx';
 import { LoginPage } from './pages/LoginPage.jsx';
 import { RegisterPage } from './pages/RegisterPage.jsx';
 import { WorkspacePage } from './pages/WorkspacePage.jsx';
@@ -14,7 +15,14 @@ function AuthRedirect({ children }) {
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+      <Route 
+        path="/" 
+        element={
+          <AuthRedirect>
+            <LandingPage />
+          </AuthRedirect>
+        } 
+      />
       <Route
         path="/login"
         element={
@@ -41,7 +49,7 @@ export default function App() {
           </ProtectedRoute>
         }
       />
-      <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }
