@@ -59,21 +59,21 @@ export function WorkspacePage() {
         animate={{ 
           scale: [1, 1.2, 1],
           rotate: [0, 90, 0],
-          opacity: [0.15, 0.3, 0.15]
+          opacity: [0.5, 0.8, 0.5]
         }}
         transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-        className="absolute -top-[20%] -left-[10%] w-[70vw] h-[70vw] rounded-full bg-blue-600/20 blur-[120px]" 
+        className="absolute -top-[10%] -left-[10%] w-[60vw] h-[60vw] rounded-full bg-cyan-600/30 blur-[100px]" 
       />
       <motion.div 
         animate={{ 
           scale: [1, 1.5, 1],
           rotate: [0, -90, 0],
-          opacity: [0.1, 0.25, 0.1]
+          opacity: [0.4, 0.7, 0.4]
         }}
         transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
-        className="absolute top-[40%] -right-[10%] w-[60vw] h-[60vw] rounded-full bg-purple-600/20 blur-[120px]" 
+        className="absolute top-[30%] -right-[10%] w-[50vw] h-[50vw] rounded-full bg-violet-600/30 blur-[100px]" 
       />
-      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.15] mix-blend-overlay"></div>
+      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay"></div>
     </div>
   );
 
