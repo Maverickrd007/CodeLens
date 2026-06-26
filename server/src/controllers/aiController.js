@@ -1,5 +1,5 @@
 import { buildPromptForTask, normalizeAiRequestContext } from '../services/aiPromptService.js';
-import { createStructuredResponse } from '../services/geminiService.js';
+import { createStructuredResponse } from '../services/bedrockService.js';
 
 export async function askCodebase(req, res, next) {
   try {

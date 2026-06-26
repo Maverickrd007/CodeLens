@@ -52,17 +52,19 @@ export const env = {
   jwtAccessSecret: process.env.JWT_ACCESS_SECRET,
   jwtAccessExpiresIn: process.env.JWT_ACCESS_EXPIRES_IN ?? '15m',
   githubToken: process.env.GITHUB_TOKEN,
-  geminiApiKey: process.env.GEMINI_API_KEY,
-  geminiModel: process.env.GEMINI_MODEL ?? 'gemini-2.5-flash',
-  geminiMaxRetries: parsePositiveInteger(process.env.GEMINI_MAX_RETRIES, 2, 'GEMINI_MAX_RETRIES'),
-  geminiRequestTimeoutMs: parsePositiveInteger(
-    process.env.GEMINI_REQUEST_TIMEOUT_MS,
+  awsAccessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  awsSecretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  awsRegion: process.env.AWS_REGION ?? 'us-east-1',
+  bedrockModelId: process.env.BEDROCK_MODEL_ID ?? 'amazon.nova-lite-v1:0',
+  aiMaxRetries: parsePositiveInteger(process.env.AI_MAX_RETRIES, 2, 'AI_MAX_RETRIES'),
+  aiRequestTimeoutMs: parsePositiveInteger(
+    process.env.AI_REQUEST_TIMEOUT_MS,
     60000,
-    'GEMINI_REQUEST_TIMEOUT_MS'
+    'AI_REQUEST_TIMEOUT_MS'
   ),
-  geminiMaxOutputTokens: parseOptionalPositiveInteger(
-    process.env.GEMINI_MAX_OUTPUT_TOKENS,
-    'GEMINI_MAX_OUTPUT_TOKENS'
+  aiMaxOutputTokens: parseOptionalPositiveInteger(
+    process.env.AI_MAX_OUTPUT_TOKENS,
+    'AI_MAX_OUTPUT_TOKENS'
   ),
   aiMaxFileChunkChars: parsePositiveInteger(
     process.env.AI_MAX_FILE_CHUNK_CHARS,
