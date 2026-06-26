@@ -27,15 +27,17 @@ function MessageBubble({ message }) {
   const Icon = isUser ? User : Bot;
 
   return (
-    <article className={`flex gap-3 ${isUser ? 'justify-end' : ''}`}>
+    <article className={`flex gap-3 mb-6 ${isUser ? 'justify-end' : ''}`}>
       {!isUser ? (
-        <span className="mt-0.5 grid size-8 shrink-0 place-items-center rounded-md bg-cyan-100 text-cyan-700">
+        <span className="mt-1 grid size-8 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/20">
           <Icon size={16} aria-hidden="true" />
         </span>
       ) : null}
       <div
-        className={`max-w-[min(88%,42rem)] rounded-lg px-3 py-2 text-sm leading-6 ${
-          isUser ? 'bg-slate-950 text-white' : 'border border-slate-200 bg-white text-slate-700'
+        className={`max-w-[min(88%,42rem)] rounded-2xl px-4 py-3 text-[14px] leading-relaxed shadow-sm ${
+          isUser 
+            ? 'bg-white/10 text-white rounded-tr-sm backdrop-blur-md border border-white/5' 
+            : 'bg-black/40 text-slate-200 rounded-tl-sm backdrop-blur-md border border-white/5'
         }`}
       >
         {isUser ? (
@@ -44,7 +46,8 @@ function MessageBubble({ message }) {
           <>
             <ResponsePanel answer={message.answer} />
             {message.filesUsed?.length ? (
-              <p className="mt-3 border-t border-slate-200 pt-2 text-xs text-slate-500">
+              <p className="mt-4 border-t border-white/10 pt-3 text-[11px] font-medium text-slate-500 flex items-center gap-1.5">
+                <BookOpen size={12} className="text-cyan-500" />
                 {message.filesUsed.length} file context item(s)
               </p>
             ) : null}
@@ -52,7 +55,7 @@ function MessageBubble({ message }) {
         )}
       </div>
       {isUser ? (
-        <span className="mt-0.5 grid size-8 shrink-0 place-items-center rounded-md bg-slate-200 text-slate-700">
+        <span className="mt-1 grid size-8 shrink-0 place-items-center rounded-xl bg-slate-800 text-slate-300 border border-white/10">
           <Icon size={16} aria-hidden="true" />
         </span>
       ) : null}
@@ -158,73 +161,80 @@ export function ChatPanel({ codebase, selectedFile, initialSession }) {
   }
 
   return (
-    <section className="flex min-h-[540px] flex-col border-t border-slate-200 bg-slate-50 lg:min-h-0 lg:border-l lg:border-t-0">
-      <header className="border-b border-slate-200 bg-white p-4">
-        <div className="flex items-center gap-2">
-          <span className="grid size-8 place-items-center rounded-md bg-cyan-100 text-cyan-700">
+    <section className="flex min-h-[540px] flex-col border-t border-white/5 bg-transparent lg:min-h-0 lg:border-t-0 relative">
+      <header className="border-b border-white/5 bg-white/[0.02] p-4 backdrop-blur-md">
+        <div className="flex items-center gap-3">
+          <span className="grid size-9 place-items-center rounded-xl bg-gradient-to-br from-slate-800 to-slate-900 border border-white/10 text-cyan-400 shadow-lg shadow-cyan-500/10">
             <Sparkles size={16} aria-hidden="true" />
           </span>
           <div>
-            <h2 className="text-sm font-semibold text-slate-950">Ask CodeLens</h2>
-            <p className="text-xs text-slate-500">{helperText}</p>
+            <h2 className="text-sm font-bold text-white tracking-tight">Ask CodeLens</h2>
+            <p className="text-[11px] font-medium text-slate-400">{helperText}</p>
           </div>
         </div>
-        <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-2">
+        <div className="mt-5 grid grid-cols-2 gap-2.5 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
           {TASK_OPTIONS.map((option) => (
             <button
               key={option.value}
               type="button"
               disabled={isHistoryOnly}
               onClick={() => setTask(option.value)}
-              className={`inline-flex items-center justify-center gap-2 rounded-md border px-3 py-2 text-sm font-medium transition ${
+              className={`inline-flex items-center justify-center gap-2 rounded-lg border px-3 py-2 text-[12px] font-medium transition-all duration-300 ${
                 task === option.value
-                  ? 'border-slate-950 bg-slate-950 text-white'
-                  : 'border-slate-200 bg-white text-slate-600 hover:text-slate-950'
-              } disabled:opacity-50 disabled:cursor-not-allowed`}
+                  ? 'border-cyan-500/50 bg-cyan-500/10 text-cyan-300 shadow-[0_0_15px_rgba(6,182,212,0.15)]'
+                  : 'border-white/5 bg-white/[0.02] text-slate-400 hover:text-slate-200 hover:bg-white/[0.04]'
+              } disabled:opacity-30 disabled:cursor-not-allowed`}
             >
-              <option.icon size={15} aria-hidden="true" />
+              <option.icon size={14} aria-hidden="true" />
               {option.label}
             </button>
           ))}
         </div>
       </header>
 
-      <div className="min-h-0 flex-1 space-y-4 overflow-auto p-3 sm:p-4">
+      <div className="min-h-0 flex-1 overflow-auto p-4 sm:p-6 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
         {messages.length ? (
           messages.map((message, index) => <MessageBubble key={message._id || index} message={message} />)
         ) : (
-          <div className="rounded-lg border border-slate-200 bg-white p-4 text-sm leading-6 text-slate-600">
-            Ask what a file does, where a behavior lives, or how the project is structured.
+          <div className="flex h-full flex-col items-center justify-center text-center">
+            <div className="mb-4 grid size-12 place-items-center rounded-full bg-white/5 border border-white/10 text-slate-500">
+              <Bot size={24} />
+            </div>
+            <p className="text-sm font-medium text-slate-300">How can I help you today?</p>
+            <p className="mt-1 max-w-xs text-xs text-slate-500">Ask what a file does, where a behavior lives, or how the project is structured.</p>
           </div>
         )}
       </div>
 
-      <form onSubmit={handleSubmit} className="border-t border-slate-200 bg-white p-3 sm:p-4">
-        {error ? (
-          <p className="mb-3 rounded-md border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">
-            {error}
-          </p>
-        ) : null}
-        <label className="block">
-          <span className="sr-only">Question</span>
-          <textarea
-            value={question}
-            disabled={isHistoryOnly}
-            onChange={(event) => setQuestion(event.target.value)}
-            rows={3}
-            placeholder={isHistoryOnly ? "Cannot ask questions in history view." : "Ask about the selected file or architecture..."}
-            className="w-full resize-none rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-100 disabled:opacity-50 disabled:bg-slate-50"
-          />
-        </label>
-        <button
-          type="submit"
-          disabled={!canAsk || isSubmitting || isHistoryOnly}
-          className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-md bg-cyan-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-cyan-700 disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {isSubmitting ? <Loader2 size={17} className="animate-spin" /> : <Send size={17} />}
-          Ask
-        </button>
-      </form>
+      <div className="bg-transparent p-4">
+        <form onSubmit={handleSubmit} className="relative rounded-2xl border border-white/10 bg-black/40 backdrop-blur-xl p-2 shadow-2xl focus-within:border-cyan-500/50 focus-within:bg-black/60 transition-colors">
+          {error ? (
+            <p className="absolute -top-12 left-0 right-0 rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-2 text-[12px] text-red-200 backdrop-blur-md">
+              {error}
+            </p>
+          ) : null}
+          <label className="block">
+            <span className="sr-only">Question</span>
+            <textarea
+              value={question}
+              disabled={isHistoryOnly}
+              onChange={(event) => setQuestion(event.target.value)}
+              rows={2}
+              placeholder={isHistoryOnly ? "Cannot ask questions in history view." : "Message CodeLens..."}
+              className="w-full resize-none border-0 bg-transparent px-3 py-2 text-[14px] text-slate-200 placeholder:text-slate-500 outline-none focus:ring-0 disabled:opacity-50 scrollbar-thin scrollbar-thumb-white/10"
+            />
+          </label>
+          <div className="flex justify-end pt-1">
+            <button
+              type="submit"
+              disabled={!canAsk || isSubmitting || isHistoryOnly}
+              className="inline-flex size-9 items-center justify-center rounded-xl bg-cyan-500 text-white transition-all hover:bg-cyan-400 hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:shadow-none"
+            >
+              {isSubmitting ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} className="ml-0.5" />}
+            </button>
+          </div>
+        </form>
+      </div>
     </section>
   );
 }
