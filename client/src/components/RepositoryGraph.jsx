@@ -230,19 +230,19 @@ export function RepositoryGraph() {
       </div>
 
       {/* AI Interaction Overlay (HTML) */}
-      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none w-full max-w-md px-6">
+      <div className="absolute top-1/2 -translate-y-1/2 right-8 flex flex-col items-end pointer-events-none w-full max-w-sm z-50">
         <AnimatePresence mode="wait">
           {(phase === 'asking' || phase === 'highlighting') && (
             <motion.div
               key="question"
-              initial={{ opacity: 0, y: 10, filter: 'blur(4px)' }}
-              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-              exit={{ opacity: 0, y: -10, filter: 'blur(4px)' }}
+              initial={{ opacity: 0, x: 20, filter: 'blur(4px)' }}
+              animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
+              exit={{ opacity: 0, x: 20, filter: 'blur(4px)' }}
               transition={{ duration: 0.5 }}
-              className="mb-4 rounded-full border border-white/10 bg-[#0c0c0e]/80 backdrop-blur-md px-6 py-3 shadow-2xl"
+              className="mb-4 rounded-2xl rounded-tr-sm border border-white/10 bg-[#0c0c0e]/80 backdrop-blur-md px-5 py-3 shadow-2xl"
             >
-              <p className="text-sm font-medium text-slate-200">
-                <span className="text-purple-400 mr-2">User:</span>
+              <p className="text-[13px] font-medium text-slate-200">
+                <span className="text-purple-400 mr-2 font-semibold">User:</span>
                 {currentScenario.question}
               </p>
             </motion.div>
@@ -253,14 +253,14 @@ export function RepositoryGraph() {
           {phase === 'highlighting' && (
             <motion.div
               key="answer"
-              initial={{ opacity: 0, y: 10, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 10, scale: 0.95 }}
+              initial={{ opacity: 0, x: 20, scale: 0.95 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              exit={{ opacity: 0, x: 20, scale: 0.95 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="w-full rounded-2xl border border-cyan-500/30 bg-cyan-950/40 backdrop-blur-xl p-5 shadow-[0_0_40px_rgba(34,211,238,0.1)] relative overflow-hidden"
+              className="w-full rounded-2xl rounded-tr-sm border border-cyan-500/30 bg-cyan-950/40 backdrop-blur-xl p-5 shadow-[0_0_40px_rgba(34,211,238,0.1)] relative overflow-hidden"
             >
               <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
-              <p className="text-sm font-medium text-cyan-50 leading-relaxed mb-4">
+              <p className="text-[13px] font-medium text-cyan-50 leading-relaxed mb-4">
                 {currentScenario.response}
               </p>
               <div className="flex items-center gap-4 border-t border-cyan-500/20 pt-3">
