@@ -35,42 +35,38 @@ export function LoginPage() {
   }
 
   return (
-    <AuthLayout title="Welcome back" subtitle="Sign in to your AI workspace.">
+    <AuthLayout title="Welcome back" subtitle="Sign in to your workspace.">
       
       {/* Social Logins */}
       <div className="grid grid-cols-2 gap-3 mb-6">
-        <motion.button 
-          whileHover={{ scale: 1.02, y: -1 }}
-          whileTap={{ scale: 0.98 }}
+        <button 
           type="button" 
-          className="flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-medium text-slate-200 transition-colors hover:bg-white/10"
+          className="flex items-center justify-center gap-2 rounded-md border border-white/10 bg-white/[0.02] px-4 py-2 text-sm font-medium text-slate-200 transition-colors hover:bg-white/[0.04]"
         >
-          <Code2 size={18} />
+          <Code2 size={16} />
           GitHub
-        </motion.button>
-        <motion.button 
-          whileHover={{ scale: 1.02, y: -1 }}
-          whileTap={{ scale: 0.98 }}
+        </button>
+        <button 
           type="button" 
-          className="flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-medium text-slate-200 transition-colors hover:bg-white/10"
+          className="flex items-center justify-center gap-2 rounded-md border border-white/10 bg-white/[0.02] px-4 py-2 text-sm font-medium text-slate-200 transition-colors hover:bg-white/[0.04]"
         >
-          <Mail size={18} />
+          <Mail size={16} />
           Google
-        </motion.button>
+        </button>
       </div>
       
       <div className="relative mb-6">
         <div className="absolute inset-0 flex items-center">
           <div className="w-full border-t border-white/10"></div>
         </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-slate-900/50 px-2 text-slate-500 backdrop-blur-md">Or continue with</span>
+        <div className="relative flex justify-center text-[11px] uppercase tracking-wider font-medium">
+          <span className="bg-[#09090b] px-3 text-slate-500">Or continue with email</span>
         </div>
       </div>
 
-      <form className="space-y-5" onSubmit={handleSubmit}>
+      <form className="space-y-4" onSubmit={handleSubmit}>
         <label className="block">
-          <span className="text-sm font-medium text-slate-300">Email</span>
+          <span className="text-[13px] font-medium text-slate-300">Email</span>
           <input
             name="email"
             type="email"
@@ -78,13 +74,13 @@ export function LoginPage() {
             onChange={updateField}
             autoComplete="email"
             required
-            className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-slate-200 outline-none transition focus:border-cyan-500 focus:bg-black/40 focus:ring-1 focus:ring-cyan-500 placeholder:text-slate-600"
+            className="mt-1.5 w-full rounded-md border border-white/10 bg-black/20 px-3 py-2 text-sm text-slate-200 outline-none transition focus:border-white/30 focus:bg-white/[0.02] placeholder:text-slate-600"
             placeholder="you@example.com"
           />
         </label>
         <label className="block">
-          <span className="text-sm font-medium text-slate-300">Password</span>
-          <div className="mt-2 flex rounded-xl border border-white/10 bg-black/20 focus-within:border-cyan-500 focus-within:bg-black/40 focus-within:ring-1 focus-within:ring-cyan-500 transition">
+          <span className="text-[13px] font-medium text-slate-300">Password</span>
+          <div className="mt-1.5 flex rounded-md border border-white/10 bg-black/20 focus-within:border-white/30 focus-within:bg-white/[0.02] transition">
             <input
               name="password"
               type={showPassword ? 'text' : 'password'}
@@ -93,16 +89,16 @@ export function LoginPage() {
               autoComplete="current-password"
               required
               placeholder="••••••••"
-              className="min-w-0 flex-1 rounded-xl border-0 bg-transparent px-4 py-3 text-sm text-slate-200 outline-none placeholder:text-slate-600"
+              className="min-w-0 flex-1 rounded-md border-0 bg-transparent px-3 py-2 text-sm text-slate-200 outline-none placeholder:text-slate-600"
             />
             <button
               type="button"
               onClick={() => setShowPassword((value) => !value)}
-              className="inline-flex size-11 items-center justify-center text-slate-500 transition hover:text-slate-300 mr-1"
+              className="inline-flex size-9 items-center justify-center text-slate-500 transition hover:text-slate-300 mr-1"
               title={showPassword ? 'Hide password' : 'Show password'}
               aria-label={showPassword ? 'Hide password' : 'Show password'}
             >
-              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
             </button>
           </div>
         </label>
@@ -111,27 +107,25 @@ export function LoginPage() {
           <motion.p 
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
-            className="rounded-xl border border-rose-500/20 bg-rose-500/10 px-4 py-3 text-sm text-rose-400"
+            className="rounded-md border border-red-500/20 bg-red-500/10 px-3 py-2 text-sm text-red-400"
           >
             {error}
           </motion.p>
         ) : null}
         
-        <motion.button
-          whileHover={{ scale: 1.01, y: -1 }}
-          whileTap={{ scale: 0.98 }}
+        <button
           type="submit"
           disabled={isSubmitting}
-          className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:from-cyan-400 hover:to-blue-500 shadow-lg shadow-cyan-500/20 disabled:cursor-not-allowed disabled:opacity-70"
+          className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-white px-4 py-2 text-sm font-medium text-black transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50 mt-2"
         >
-          {isSubmitting ? <Loader2 size={18} className="animate-spin" /> : <LogIn size={18} />}
+          {isSubmitting ? <Loader2 size={16} className="animate-spin" /> : null}
           Sign in
-        </motion.button>
+        </button>
       </form>
-      <p className="mt-8 text-center text-sm text-slate-400">
+      <p className="mt-6 text-center text-sm text-slate-400">
         New to CodeLens?{' '}
         <Link
-          className="font-medium text-cyan-400 underline-offset-4 hover:underline"
+          className="font-medium text-white underline-offset-4 hover:underline"
           to="/register"
         >
           Create an account
