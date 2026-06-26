@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { ChatPanel } from '../components/ChatPanel.jsx';
 import { FileExplorerSidebar } from '../components/FileExplorerSidebar.jsx';
 import { FilePreview } from '../components/FilePreview.jsx';
+import { InteractiveMesh } from '../components/InteractiveMesh.jsx';
 import { SessionHistory } from '../components/SessionHistory.jsx';
 import { UploadPanel } from '../components/UploadPanel.jsx';
 import { fetchSession } from '../services/api.js';
@@ -52,35 +53,10 @@ export function WorkspacePage() {
     }
   }
 
-  // 3D Animated Gradient Mesh Background Component
-  const AnimatedBackground = () => (
-    <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-      <motion.div 
-        animate={{ 
-          scale: [1, 1.2, 1],
-          rotate: [0, 90, 0],
-          opacity: [0.5, 0.8, 0.5]
-        }}
-        transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-        className="absolute -top-[10%] -left-[10%] w-[60vw] h-[60vw] rounded-full bg-cyan-600/30 blur-[100px]" 
-      />
-      <motion.div 
-        animate={{ 
-          scale: [1, 1.5, 1],
-          rotate: [0, -90, 0],
-          opacity: [0.4, 0.7, 0.4]
-        }}
-        transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
-        className="absolute top-[30%] -right-[10%] w-[50vw] h-[50vw] rounded-full bg-violet-600/30 blur-[100px]" 
-      />
-      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay"></div>
-    </div>
-  );
-
   if (codebase) {
     return (
-      <main className="relative min-h-screen bg-[#09090b] text-slate-200">
-        <AnimatedBackground />
+      <main className="relative min-h-screen bg-[#05050a] text-slate-200">
+        <InteractiveMesh />
         <div className="relative z-10 mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
           <section className="flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-black/40 backdrop-blur-xl shadow-2xl lg:grid lg:h-[calc(100vh-7rem)] lg:grid-cols-[300px_minmax(0,1fr)_380px]">
             <FileExplorerSidebar
@@ -102,8 +78,8 @@ export function WorkspacePage() {
   }
 
   return (
-    <main className="relative min-h-screen bg-[#09090b] text-slate-200 selection:bg-cyan-500/30 overflow-hidden font-sans">
-      <AnimatedBackground />
+    <main className="relative min-h-screen bg-[#05050a] text-slate-200 selection:bg-cyan-500/30 overflow-hidden font-sans">
+      <InteractiveMesh />
       
       {/* Top Navigation / Header */}
       <header className="relative z-20 border-b border-white/5 bg-[#0c0c0e]/60 backdrop-blur-2xl px-6 py-4 shadow-sm">

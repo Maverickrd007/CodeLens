@@ -2,6 +2,8 @@ import { motion } from 'framer-motion';
 import { Bot, Bug, Code2, FlaskConical, Network, SearchCode, ShieldAlert, Sparkles, TerminalSquare, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
+import { InteractiveMesh } from '../components/InteractiveMesh.jsx';
+
 const floatingAnimation = {
   y: ['-10px', '10px'],
   transition: {
@@ -21,30 +23,9 @@ const featurePills = [
 
 export function LandingPage() {
   return (
-    <main className="relative min-h-screen bg-[#09090b] text-slate-200 selection:bg-cyan-500/30 overflow-hidden font-sans">
+    <main className="relative min-h-screen bg-[#05050a] text-slate-200 selection:bg-cyan-500/30 overflow-hidden font-sans">
       
-      {/* 3D Animated Gradient Mesh Background */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <motion.div 
-          animate={{ 
-            scale: [1, 1.2, 1],
-            rotate: [0, 90, 0],
-            opacity: [0.5, 0.8, 0.5]
-          }}
-          transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-          className="absolute -top-[10%] -left-[10%] w-[60vw] h-[60vw] rounded-full bg-cyan-600/30 blur-[100px]" 
-        />
-        <motion.div 
-          animate={{ 
-            scale: [1, 1.5, 1],
-            rotate: [0, -90, 0],
-            opacity: [0.4, 0.7, 0.4]
-          }}
-          transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
-          className="absolute top-[30%] -right-[10%] w-[50vw] h-[50vw] rounded-full bg-violet-600/30 blur-[100px]" 
-        />
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay"></div>
-      </div>
+      <InteractiveMesh />
 
       {/* Top Navigation */}
       <header className="relative z-20 mx-auto max-w-7xl px-6 py-6 lg:px-8">

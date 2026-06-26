@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Bot, Code2, Database, Network, SearchCode, ShieldAlert, Sparkles, TerminalSquare } from 'lucide-react';
+import { InteractiveMesh } from './InteractiveMesh.jsx';
 
 const floatingAnimation = {
   y: ['-10px', '10px'],
@@ -19,34 +20,10 @@ const featurePills = [
 ];
 
 export function AuthLayout({ title, subtitle, children }) {
-  const AnimatedBackground = () => (
-    <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-      <motion.div 
-        animate={{ 
-          scale: [1, 1.2, 1],
-          rotate: [0, 90, 0],
-          opacity: [0.5, 0.8, 0.5]
-        }}
-        transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-        className="absolute -top-[10%] -left-[10%] w-[60vw] h-[60vw] rounded-full bg-cyan-600/30 blur-[100px]" 
-      />
-      <motion.div 
-        animate={{ 
-          scale: [1, 1.5, 1],
-          rotate: [0, -90, 0],
-          opacity: [0.4, 0.7, 0.4]
-        }}
-        transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
-        className="absolute top-[30%] -right-[10%] w-[50vw] h-[50vw] rounded-full bg-violet-600/30 blur-[100px]" 
-      />
-      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay"></div>
-    </div>
-  );
-
   return (
-    <main className="relative min-h-screen bg-[#09090b] text-slate-200 selection:bg-cyan-500/30 overflow-hidden font-sans">
+    <main className="relative min-h-screen bg-[#05050a] text-slate-200 selection:bg-cyan-500/30 overflow-hidden font-sans">
       
-      <AnimatedBackground />
+      <InteractiveMesh />
 
       <div className="relative z-10 mx-auto grid min-h-screen w-full max-w-7xl items-center gap-12 px-6 py-12 lg:grid-cols-[1.2fr_1fr] lg:px-8">
         
