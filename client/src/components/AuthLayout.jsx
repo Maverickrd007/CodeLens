@@ -33,13 +33,11 @@ export function AuthLayout({ title, subtitle, children }) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="flex items-center gap-3 mb-16"
+            className="flex items-center gap-4 mb-16"
           >
-            <span className="grid w-12 h-12 place-items-center rounded-xl bg-gradient-to-br from-slate-800 to-slate-900 border border-white/10 shadow-lg shadow-cyan-500/20 text-cyan-400">
-              <SearchCode size={24} />
-            </span>
+            <img src="/favicon.svg" alt="CodeLens Logo" className="w-12 h-12 rounded-xl shadow-lg" />
             <div>
-              <p className="text-xl font-bold tracking-tight text-white">CodeLens</p>
+              <p className="text-2xl font-bold tracking-tight text-white">CodeLens</p>
               <p className="text-sm font-medium text-cyan-400">AI Workspace</p>
             </div>
           </motion.div>
@@ -114,11 +112,8 @@ export function AuthLayout({ title, subtitle, children }) {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="w-full max-w-[440px] rounded-[24px] border border-white/10 bg-slate-900/50 p-8 shadow-2xl backdrop-blur-2xl sm:p-10"
           >
-            {/* Mobile Logo */}
             <div className="mb-8 flex items-center gap-3 lg:hidden">
-              <span className="grid w-12 h-12 place-items-center rounded-xl bg-gradient-to-br from-slate-800 to-slate-900 border border-white/10 shadow-lg text-cyan-400">
-                <SearchCode size={24} />
-              </span>
+              <img src="/favicon.svg" alt="CodeLens Logo" className="w-12 h-12 rounded-xl shadow-lg" />
               <div>
                 <p className="text-xl font-bold text-white">CodeLens</p>
                 <p className="text-xs font-medium text-cyan-400">AI Workspace</p>

@@ -86,9 +86,7 @@ export function WorkspacePage() {
         <div className="mx-auto flex max-w-7xl items-center justify-between">
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-3">
-              <span className="grid w-8 h-8 place-items-center rounded-lg bg-gradient-to-br from-slate-800 to-slate-900 border border-white/10 shadow-lg text-cyan-400 font-bold text-sm">
-                C
-              </span>
+              <img src="/favicon.svg" alt="CodeLens Logo" className="w-8 h-8 rounded-lg shadow-lg" />
               <span className="text-base font-bold text-white tracking-tight">CodeLens</span>
             </div>
             <div className="h-5 w-px bg-white/10"></div>

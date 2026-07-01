@@ -164,9 +164,7 @@ export function ChatPanel({ codebase, selectedFile, initialSession }) {
     <section className="flex min-h-[540px] flex-col border-t border-white/5 bg-transparent lg:min-h-0 lg:border-t-0 relative">
       <header className="border-b border-white/5 bg-white/[0.02] p-4 backdrop-blur-md">
         <div className="flex items-center gap-3">
-          <span className="grid size-9 place-items-center rounded-xl bg-gradient-to-br from-slate-800 to-slate-900 border border-white/10 text-cyan-400 shadow-lg shadow-cyan-500/10">
-            <Sparkles size={16} aria-hidden="true" />
-          </span>
+          <img src="/favicon.svg" alt="CodeLens Logo" className="w-9 h-9 rounded-xl shadow-lg" />
           <div>
             <h2 className="text-sm font-bold text-white tracking-tight">Ask CodeLens</h2>
             <p className="text-[11px] font-medium text-slate-400">{helperText}</p>
