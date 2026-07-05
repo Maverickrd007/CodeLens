@@ -2,6 +2,8 @@
 
 CodeLens is an AI-powered codebase assistant that lets developers upload a GitHub repository or local code folder and interact with it via natural language. Users can ask questions about the architecture, generate test cases, write documentation drafts, and identify bugs seamlessly.
 
+https://codelens-sigma.vercel.app
+
 ## Architecture
 
 The project follows a standard client-server monorepo architecture:
