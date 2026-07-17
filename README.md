@@ -12,7 +12,7 @@ The project follows a standard client-server monorepo architecture:
 - **Server**: A Node.js API powered by Express, providing REST endpoints.
 - **Database**: MongoDB for storing users, active sessions, and chat history.
 - **Auth**: JWT-based authentication (access and refresh tokens).
-- **AI Core**: Deep integration with the OpenAI API for chunking files, context injection, and returning structural responses based on detailed prompt templates.
+- **AI Core**: Deep integration with the Amazon AWS API for chunking files, context injection, and returning structural responses based on detailed prompt templates.
 
 ## Prerequisites
 
