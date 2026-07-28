@@ -15,6 +15,15 @@ import { parseBufferEntries } from './fileTreeService.js';
 const octokit = new Octokit({
   ...(env.githubToken ? { auth: env.githubToken } : {}),
   userAgent: 'codelens-api/0.1.0',
+  throttle: {
+    onRateLimit: (retryAfter, options, octokit, retryCount) => {
+      // Do not retry on rate limit, fail fast.
+      return false;
+    },
+    onSecondaryRateLimit: (retryAfter, options, octokit) => {
+      return false;
+    },
+  },
 });
 
 function parseRepositoryUrl(repositoryUrl) {
