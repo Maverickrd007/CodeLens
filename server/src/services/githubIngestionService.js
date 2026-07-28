@@ -1,5 +1,6 @@
 import { Octokit } from 'octokit';
 import path from 'node:path';
+import unzipper from 'unzipper';
 
 import {
   MAX_SINGLE_SOURCE_FILE_BYTES,
@@ -153,46 +154,56 @@ async function fetchBlobBuffer(owner, repo, fileSha) {
   return Buffer.from(data.content, data.encoding);
 }
 
+
+
 export async function ingestGithubRepository(repositoryUrl) {
   const { owner, repo, mode, rest } = parseRepositoryUrl(repositoryUrl);
   const repository = await getRepository(owner, repo);
   const { ref, pathPrefix } = await resolveUrlRef(owner, repo, repository, mode, rest);
   const commitSha = await getBranchCommitSha(owner, repo, ref);
-  const { data: treeData } = await octokit.rest.git.getTree({
+
+  const { data: zipData } = await octokit.rest.repos.downloadZipballArchive({
     owner,
     repo,
-    tree_sha: commitSha,
-    recursive: 'true',
+    ref: commitSha,
   });
 
-  if (treeData.truncated) {
-    throw new ApiError(
-      413,
-      'github_tree_too_large',
-      'GitHub repository tree is too large to ingest at once.'
-    );
-  }
-
+  const directory = await unzipper.Open.buffer(Buffer.from(zipData));
   const entries = [];
   let totalBytes = 0;
 
-  for (const treeItem of treeData.tree) {
-    if (treeItem.type !== 'blob' || !treeItem.path || !treeItem.sha) {
+  for (const entry of directory.files) {
+    if (entry.type !== 'File' || !entry.path) {
       continue;
     }
 
-    if (!isPathInPrefix(treeItem.path, pathPrefix)) {
+    // GitHub zip archives have a root folder like "owner-repo-commitSha/"
+    const parts = entry.path.split('/');
+    parts.shift();
+    const treePath = parts.join('/');
+
+    if (!isPathInPrefix(treePath, pathPrefix)) {
       continue;
     }
 
-    const parsedPath = getRelativeIngestPath(treeItem.path, pathPrefix);
+    const parsedPath = getRelativeIngestPath(treePath, pathPrefix);
 
     if (!isSupportedSourcePath(parsedPath)) {
       continue;
     }
 
-    validateTreeItem(treeItem);
-    totalBytes += treeItem.size ?? 0;
+    const uncompressedSize = entry.uncompressedSize ?? 0;
+    
+    // Validate individual file size
+    if (uncompressedSize > MAX_SINGLE_SOURCE_FILE_BYTES) {
+      throw new ApiError(
+        413,
+        'source_file_too_large',
+        `${parsedPath} exceeds the source file size limit.`
+      );
+    }
+
+    totalBytes += uncompressedSize;
 
     if (entries.length >= MAX_TOTAL_SOURCE_FILES) {
       throw new ApiError(
@@ -212,7 +223,7 @@ export async function ingestGithubRepository(repositoryUrl) {
 
     entries.push({
       path: parsedPath,
-      buffer: await fetchBlobBuffer(owner, repo, treeItem.sha),
+      buffer: await entry.buffer(),
     });
   }
 
