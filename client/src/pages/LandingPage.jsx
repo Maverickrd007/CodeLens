@@ -30,7 +30,7 @@ export function LandingPage() {
       <header className="relative z-20 mx-auto max-w-7xl px-6 py-6 lg:px-8">
         <nav className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.02] px-6 py-3 backdrop-blur-md">
           <div className="flex items-center gap-3">
-            <img src="/favicon.svg" alt="CodeLens Logo" className="w-8 h-8 rounded-lg shadow-lg" />
+            <img src="/logo.png" alt="CodeLens Logo" className="w-8 h-8 rounded-lg shadow-lg" />
             <span className="text-xl font-bold text-white tracking-tight">CodeLens</span>
           </div>
           <div className="flex items-center gap-4">

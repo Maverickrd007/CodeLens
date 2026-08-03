@@ -33,7 +33,7 @@ export function AuthLayout({ title, subtitle, children }) {
             transition={{ duration: 0.8 }}
             className="flex items-center gap-4 mb-16"
           >
-            <img src="/favicon.svg" alt="CodeLens Logo" className="w-12 h-12 rounded-xl shadow-lg" />
+            <img src="/logo.png" alt="CodeLens Logo" className="w-12 h-12 rounded-xl shadow-lg" />
             <div>
               <p className="text-2xl font-bold tracking-tight text-white">CodeLens</p>
               <p className="text-sm font-medium text-cyan-400">AI Workspace</p>
@@ -86,7 +86,7 @@ export function AuthLayout({ title, subtitle, children }) {
             className="w-full max-w-[440px] rounded-[24px] border border-white/10 bg-slate-900/50 p-8 shadow-2xl backdrop-blur-2xl sm:p-10"
           >
             <div className="mb-8 flex items-center gap-3 lg:hidden">
-              <img src="/favicon.svg" alt="CodeLens Logo" className="w-12 h-12 rounded-xl shadow-lg" />
+              <img src="/logo.png" alt="CodeLens Logo" className="w-12 h-12 rounded-xl shadow-lg" />
               <div>
                 <p className="text-xl font-bold text-white">CodeLens</p>
                 <p className="text-xs font-medium text-cyan-400">AI Workspace</p>

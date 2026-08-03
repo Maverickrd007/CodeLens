@@ -164,7 +164,7 @@ export function ChatPanel({ codebase, selectedFile, initialSession }) {
     <section className="flex min-h-[540px] flex-col border-t border-white/5 bg-transparent lg:min-h-0 lg:border-t-0 relative">
       <header className="border-b border-white/5 bg-white/[0.02] p-4 backdrop-blur-md">
         <div className="flex items-center gap-3">
-          <img src="/favicon.svg" alt="CodeLens Logo" className="w-9 h-9 rounded-xl shadow-lg" />
+          <img src="/logo.png" alt="CodeLens Logo" className="w-9 h-9 rounded-xl shadow-lg" />
           <div>
             <h2 className="text-sm font-bold text-white tracking-tight">Ask CodeLens</h2>
             <p className="text-[11px] font-medium text-slate-400">{helperText}</p>

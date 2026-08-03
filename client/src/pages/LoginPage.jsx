@@ -68,7 +68,7 @@ export function LoginPage() {
         {/* Top Logo */}
         <div className="flex justify-center mb-8">
           <div className="flex items-center gap-3">
-            <img src="/favicon.svg" alt="CodeLens Logo" className="w-10 h-10 rounded-xl shadow-lg" />
+            <img src="/logo.png" alt="CodeLens Logo" className="w-10 h-10 rounded-xl shadow-lg" />
             <span className="text-2xl font-bold text-white tracking-tight">CodeLens</span>
           </div>
         </div>
