@@ -52,15 +52,6 @@ export function LandingPage() {
 
       {/* Hero Section */}
       <section className="relative z-10 mx-auto flex max-w-7xl flex-col items-center px-6 pt-16 pb-32 text-center lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="mb-8 inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-4 py-1.5 text-sm font-medium text-cyan-400 backdrop-blur-md"
-        >
-          <Sparkles size={16} />
-          <span>CodeLens AI 2.0 is now available</span>
-        </motion.div>
 
         <BackgroundPaths title="Understand any codebase instantly." />
 
