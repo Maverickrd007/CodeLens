@@ -56,11 +56,8 @@ export function LoginPage() {
   });
 
   return (
-    <main className="relative flex min-h-screen items-center justify-center bg-[#05050a] text-slate-200 overflow-hidden font-sans selection:bg-cyan-500/30">
+    <main className="relative flex min-h-screen items-center justify-center bg-transparent text-slate-200 overflow-hidden font-sans selection:bg-cyan-500/30">
       
-      {/* Moving Interactive Mesh Background */}
-      <InteractiveMesh />
-
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

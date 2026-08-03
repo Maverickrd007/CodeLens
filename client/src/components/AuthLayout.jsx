@@ -21,10 +21,8 @@ const featurePills = [
 
 export function AuthLayout({ title, subtitle, children }) {
   return (
-    <main className="relative min-h-screen bg-[#05050a] text-slate-200 selection:bg-cyan-500/30 overflow-hidden font-sans">
+    <main className="relative min-h-screen bg-transparent text-slate-200 selection:bg-cyan-500/30 overflow-hidden font-sans">
       
-      <InteractiveMesh />
-
       <div className="relative z-10 mx-auto grid min-h-screen w-full max-w-7xl items-center gap-12 px-6 py-12 lg:grid-cols-[1.2fr_1fr] lg:px-8">
         
         {/* Left Side: Marketing & Visuals */}

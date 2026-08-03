@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
+import { FloatingPathsBackground } from './components/ui/floating-paths.jsx';
 
 import { AppShell } from './components/AppShell.jsx';
 import { ProtectedRoute } from './components/ProtectedRoute.jsx';
@@ -14,42 +15,44 @@ function AuthRedirect({ children }) {
 
 export default function App() {
   return (
-    <Routes>
-      <Route 
-        path="/" 
-        element={
-          <AuthRedirect>
-            <LandingPage />
-          </AuthRedirect>
-        } 
-      />
-      <Route
-        path="/login"
-        element={
-          <AuthRedirect>
-            <LoginPage />
-          </AuthRedirect>
-        }
-      />
-      <Route
-        path="/register"
-        element={
-          <AuthRedirect>
-            <RegisterPage />
-          </AuthRedirect>
-        }
-      />
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute>
-            <AppShell>
-              <WorkspacePage />
-            </AppShell>
-          </ProtectedRoute>
-        }
-      />
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+    <FloatingPathsBackground position={1} className="min-h-screen">
+      <Routes>
+        <Route 
+          path="/" 
+          element={
+            <AuthRedirect>
+              <LandingPage />
+            </AuthRedirect>
+          } 
+        />
+        <Route
+          path="/login"
+          element={
+            <AuthRedirect>
+              <LoginPage />
+            </AuthRedirect>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <AuthRedirect>
+              <RegisterPage />
+            </AuthRedirect>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <AppShell>
+                <WorkspacePage />
+              </AppShell>
+            </ProtectedRoute>
+          }
+        />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </FloatingPathsBackground>
   );
 }

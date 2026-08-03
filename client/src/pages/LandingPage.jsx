@@ -23,9 +23,8 @@ const featurePills = [
 
 export function LandingPage() {
   return (
-    <main className="relative min-h-screen bg-[#05050a] text-slate-200 selection:bg-cyan-500/30 overflow-hidden font-sans">
-      
-      <InteractiveMesh />
+    <main className="relative min-h-screen bg-transparent text-slate-200 selection:bg-cyan-500/30 overflow-hidden font-sans">
+
 
       {/* Top Navigation */}
       <header className="relative z-20 mx-auto max-w-7xl px-6 py-6 lg:px-8">

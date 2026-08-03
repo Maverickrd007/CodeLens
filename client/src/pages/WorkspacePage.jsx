@@ -55,8 +55,7 @@ export function WorkspacePage() {
 
   if (codebase) {
     return (
-      <main className="relative min-h-screen bg-[#05050a] text-slate-200">
-        <InteractiveMesh />
+      <main className="relative min-h-screen bg-transparent text-slate-200">
         <div className="relative z-10 mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
           <section className="flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-black/40 backdrop-blur-xl shadow-2xl lg:grid lg:h-[calc(100vh-7rem)] lg:grid-cols-[300px_minmax(0,1fr)_380px]">
             <FileExplorerSidebar
@@ -78,8 +77,7 @@ export function WorkspacePage() {
   }
 
   return (
-    <main className="relative min-h-screen bg-[#05050a] text-slate-200 selection:bg-cyan-500/30 overflow-hidden font-sans">
-      <InteractiveMesh />
+    <main className="relative min-h-screen bg-transparent text-slate-200 selection:bg-cyan-500/30 overflow-hidden font-sans">
       
       {/* Top Navigation / Header */}
       <header className="relative z-20 border-b border-white/5 bg-[#0c0c0e]/60 backdrop-blur-2xl px-6 py-4 shadow-sm">
