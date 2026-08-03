@@ -74,32 +74,7 @@ export function LandingPage() {
         </motion.div>
       </section>
 
-      {/* Floating Elements (Decorative) */}
-      <div className="absolute left-[10%] top-[30%] pointer-events-none hidden lg:block">
-        <motion.div
-          animate={floatingAnimation}
-          className="flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-900/60 p-4 backdrop-blur-xl shadow-2xl"
-        >
-          <Bot className="text-purple-400" size={24} />
-          <div>
-            <div className="h-2 w-24 rounded-full bg-slate-700 mb-2"></div>
-            <div className="h-2 w-16 rounded-full bg-slate-700"></div>
-          </div>
-        </motion.div>
-      </div>
-      
-      <div className="absolute right-[15%] top-[50%] pointer-events-none hidden lg:block">
-        <motion.div
-          animate={{ ...floatingAnimation, transition: { ...floatingAnimation.transition, delay: 1 } }}
-          className="flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-900/60 p-4 backdrop-blur-xl shadow-2xl"
-        >
-          <Code2 className="text-blue-400" size={24} />
-          <div>
-            <div className="h-2 w-20 rounded-full bg-slate-700 mb-2"></div>
-            <div className="h-2 w-28 rounded-full bg-slate-700"></div>
-          </div>
-        </motion.div>
-      </div>
+
 
       {/* Bento Grid Features */}
       <section id="features" className="relative z-10 mx-auto max-w-7xl px-6 pb-32 lg:px-8">

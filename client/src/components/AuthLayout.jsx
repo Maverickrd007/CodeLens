@@ -74,32 +74,7 @@ export function AuthLayout({ title, subtitle, children }) {
             </div>
           </motion.div>
 
-          {/* Floating Glass Elements */}
-          <div className="absolute right-[45%] top-[25%] pointer-events-none">
-            <motion.div
-              animate={floatingAnimation}
-              className="flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-900/60 p-4 backdrop-blur-xl shadow-2xl"
-            >
-              <Bot className="text-purple-400" size={24} />
-              <div>
-                <div className="h-2 w-24 rounded-full bg-slate-700 mb-2"></div>
-                <div className="h-2 w-16 rounded-full bg-slate-700"></div>
-              </div>
-            </motion.div>
-          </div>
-          
-          <div className="absolute right-[50%] bottom-[20%] pointer-events-none">
-            <motion.div
-              animate={{ ...floatingAnimation, transition: { ...floatingAnimation.transition, delay: 1 } }}
-              className="flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-900/60 p-4 backdrop-blur-xl shadow-2xl"
-            >
-              <Code2 className="text-blue-400" size={24} />
-              <div>
-                <div className="h-2 w-20 rounded-full bg-slate-700 mb-2"></div>
-                <div className="h-2 w-28 rounded-full bg-slate-700"></div>
-              </div>
-            </motion.div>
-          </div>
+
         </section>
 
         {/* Right Side: Auth Form */}
