@@ -43,6 +43,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       select: false,
     },
+    apiCalls: {
+      type: Number,
+      default: 0,
+    },
     refreshTokens: {
       type: [refreshTokenSchema],
       default: [],

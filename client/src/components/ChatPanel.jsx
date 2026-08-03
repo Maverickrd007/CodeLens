@@ -63,7 +63,7 @@ function MessageBubble({ message }) {
   );
 }
 
-export function ChatPanel({ codebase, selectedFile, initialSession }) {
+export function ChatPanel({ codebase, selectedFile, initialSession, onApiCallSuccess }) {
   const [task, setTask] = useState('file_explanation');
   const [question, setQuestion] = useState('');
   const [messages, setMessages] = useState([]);
@@ -138,6 +138,10 @@ export function ChatPanel({ codebase, selectedFile, initialSession }) {
         codebase,
         selectedFilePath: isSelectedFileTask ? selectedFilePath : undefined,
       });
+
+      if (response.apiCalls !== undefined && onApiCallSuccess) {
+        onApiCallSuccess(response.apiCalls);
+      }
 
       const assistantMessage = {
         role: 'assistant',

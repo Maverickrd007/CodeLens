@@ -32,6 +32,7 @@ function buildUserResponse(user) {
     id: user.id,
     name: user.name,
     email: user.email,
+    apiCalls: user.apiCalls,
     createdAt: user.createdAt,
     updatedAt: user.updatedAt,
   };

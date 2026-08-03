@@ -17,6 +17,7 @@ export function WorkspacePage() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [activeSession, setActiveSession] = useState(null);
   const [userName, setUserName] = useState('');
+  const [apiCalls, setApiCalls] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,7 +25,21 @@ export function WorkspacePage() {
     if (auth?.user?.name) {
       setUserName(auth.user.name.split(' ')[0]);
     }
+    if (auth?.user?.apiCalls !== undefined) {
+      setApiCalls(auth.user.apiCalls);
+    }
   }, []);
+
+  function handleApiCallSuccess(newCount) {
+    setApiCalls(newCount);
+    
+    // Also update localStorage so a refresh keeps it in sync
+    const auth = getStoredAuth();
+    if (auth?.user) {
+      auth.user.apiCalls = newCount;
+      import('../services/authStorage.js').then((m) => m.setStoredAuth(auth));
+    }
+  }
 
   function handleLogout() {
     clearStoredAuth();
@@ -69,6 +84,7 @@ export function WorkspacePage() {
               codebase={codebase} 
               selectedFile={selectedFile} 
               initialSession={activeSession} 
+              onApiCallSuccess={handleApiCallSuccess}
             />
           </section>
         </div>
@@ -93,11 +109,7 @@ export function WorkspacePage() {
           <div className="flex items-center gap-4">
             <div className="hidden items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[11px] font-medium text-slate-300 sm:flex backdrop-blur-md shadow-sm">
               <Activity size={14} className="text-cyan-400" />
-              <span>Usage: 2/100 API Calls</span>
-            </div>
-            <div className="hidden items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[11px] font-medium text-slate-300 sm:flex backdrop-blur-md shadow-sm">
-              <Zap size={14} className="text-amber-400" />
-              <span>Free Plan</span>
+              <span>Usage: {apiCalls}/100 API Calls</span>
             </div>
             <button 
               onClick={handleLogout}

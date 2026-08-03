@@ -7,9 +7,13 @@ export async function askCodebase(req, res, next) {
     const prompt = buildPromptForTask(context);
     const answer = await createStructuredResponse(prompt);
 
+    req.user.apiCalls = (req.user.apiCalls || 0) + 1;
+    await req.user.save();
+
     res.status(200).json({
       task: context.task,
       answer,
+      apiCalls: req.user.apiCalls,
       context: {
         filesUsed: context.filesUsed,
         omittedContext: context.omittedContext,
