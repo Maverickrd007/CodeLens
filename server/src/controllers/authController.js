@@ -1,3 +1,4 @@
+import { OAuth2Client } from 'google-auth-library';
 import { User } from '../models/User.js';
 import {
   createAccessToken,
@@ -179,5 +180,46 @@ export async function logout(req, res) {
 export async function getCurrentUser(req, res) {
   res.status(200).json({
     user: buildUserResponse(req.user),
+  });
+}
+
+export async function googleLogin(req, res) {
+  const { token } = req.body;
+  if (!token) {
+    throw new ApiError(400, 'token_required', 'Google token is required.');
+  }
+
+  const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+  
+  let ticket;
+  try {
+    ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+  } catch (err) {
+    throw new ApiError(401, 'invalid_google_token', 'Invalid Google token.');
+  }
+
+  const payload = ticket.getPayload();
+  const email = normalizeEmail(payload.email);
+  const name = normalizeName(payload.name);
+
+  if (!email) {
+    throw new ApiError(400, 'email_missing', 'Google account does not have an email address.');
+  }
+
+  let user = await User.findOne({ email }).select('+refreshTokens');
+  
+  if (!user) {
+    user = new User({ email, name });
+    await user.save();
+  }
+
+  const tokens = await issueAuthTokens(user);
+
+  res.status(200).json({
+    user: buildUserResponse(user),
+    tokens,
   });
 }

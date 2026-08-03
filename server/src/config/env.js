@@ -52,6 +52,7 @@ export const env = {
   jwtAccessSecret: process.env.JWT_ACCESS_SECRET,
   jwtAccessExpiresIn: process.env.JWT_ACCESS_EXPIRES_IN ?? '15m',
   githubToken: process.env.GITHUB_TOKEN,
+  googleClientId: process.env.GOOGLE_CLIENT_ID,
   awsAccessKeyId: process.env.AWS_ACCESS_KEY_ID,
   awsSecretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   awsRegion: process.env.AWS_REGION ?? 'us-east-1',

@@ -3,7 +3,9 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
-import { login } from '../services/api.js';
+import { useGoogleLogin } from '@react-oauth/google';
+
+import { login, googleLogin } from '../services/api.js';
 import { setStoredAuth } from '../services/authStorage.js';
 import { InteractiveMesh } from '../components/InteractiveMesh.jsx';
 
@@ -33,6 +35,25 @@ export function LoginPage() {
       setIsSubmitting(false);
     }
   }
+
+  const handleGoogleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      setError('');
+      setIsSubmitting(true);
+      try {
+        const auth = await googleLogin(tokenResponse.access_token);
+        setStoredAuth(auth);
+        navigate('/dashboard', { replace: true });
+      } catch (requestError) {
+        setError(requestError.message);
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    onError: () => {
+      setError('Google Login Failed');
+    }
+  });
 
   return (
     <main className="relative flex min-h-screen items-center justify-center bg-[#05050a] text-slate-200 overflow-hidden font-sans selection:bg-cyan-500/30">
@@ -77,7 +98,9 @@ export function LoginPage() {
             </button>
             <button 
               type="button" 
-              className="flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm font-medium text-slate-200 transition-all hover:bg-white/[0.08] hover:border-white/20"
+              onClick={() => handleGoogleLogin()}
+              disabled={isSubmitting}
+              className="flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm font-medium text-slate-200 transition-all hover:bg-white/[0.08] hover:border-white/20 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Mail size={16} />
               Google

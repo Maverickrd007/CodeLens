@@ -4,7 +4,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 import { AuthLayout } from '../components/AuthLayout.jsx';
-import { register } from '../services/api.js';
+import { useGoogleLogin } from '@react-oauth/google';
+
+import { register, googleLogin } from '../services/api.js';
 import { setStoredAuth } from '../services/authStorage.js';
 
 export function RegisterPage() {
@@ -21,13 +23,13 @@ export function RegisterPage() {
   async function handleSubmit(event) {
     event.preventDefault();
     setError('');
+    setIsSubmitting(true);
 
     if (form.password.length < 8) {
       setError('Password must be at least 8 characters long.');
+      setIsSubmitting(false);
       return;
     }
-
-    setIsSubmitting(true);
 
     try {
       const auth = await register(form);
@@ -40,6 +42,25 @@ export function RegisterPage() {
     }
   }
 
+  const handleGoogleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      setError('');
+      setIsSubmitting(true);
+      try {
+        const auth = await googleLogin(tokenResponse.access_token);
+        setStoredAuth(auth);
+        navigate('/dashboard', { replace: true });
+      } catch (requestError) {
+        setError(requestError.message);
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    onError: () => {
+      setError('Google Login Failed');
+    }
+  });
+
   return (
     <AuthLayout title="Create account" subtitle="Start a workspace for repository analysis.">
       
@@ -47,14 +68,16 @@ export function RegisterPage() {
       <div className="grid grid-cols-2 gap-3 mb-6">
         <button 
           type="button" 
-          className="flex items-center justify-center gap-2 rounded-md border border-white/10 bg-white/[0.02] px-4 py-2 text-sm font-medium text-slate-200 transition-colors hover:bg-white/[0.04]"
+          className="flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm font-medium text-slate-200 transition-all hover:bg-white/[0.08] hover:border-white/20"
         >
           <Code2 size={16} />
           GitHub
         </button>
         <button 
           type="button" 
-          className="flex items-center justify-center gap-2 rounded-md border border-white/10 bg-white/[0.02] px-4 py-2 text-sm font-medium text-slate-200 transition-colors hover:bg-white/[0.04]"
+          onClick={() => handleGoogleLogin()}
+          disabled={isSubmitting}
+          className="flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm font-medium text-slate-200 transition-all hover:bg-white/[0.08] hover:border-white/20 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <Mail size={16} />
           Google

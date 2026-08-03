@@ -40,6 +40,10 @@ export async function login(credentials) {
   return postJson('/auth/login', credentials);
 }
 
+export async function googleLogin(token) {
+  return postJson('/auth/google', { token });
+}
+
 export async function register(details) {
   return postJson('/auth/register', details);
 }
