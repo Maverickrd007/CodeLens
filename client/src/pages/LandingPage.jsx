@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { Bot, Bug, Code2, FlaskConical, Network, SearchCode, ShieldAlert, Sparkles, TerminalSquare, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-import { InteractiveMesh } from '../components/InteractiveMesh.jsx';
+import { BackgroundPaths } from '../components/ui/background-paths.jsx';
 
 const floatingAnimation = {
   y: ['-10px', '10px'],
@@ -51,7 +51,7 @@ export function LandingPage() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative z-10 mx-auto flex max-w-7xl flex-col items-center px-6 pt-24 pb-32 text-center lg:px-8">
+      <section className="relative z-10 mx-auto flex max-w-7xl flex-col items-center px-6 pt-16 pb-32 text-center lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -62,47 +62,7 @@ export function LandingPage() {
           <span>CodeLens AI 2.0 is now available</span>
         </motion.div>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.1 }}
-          className="max-w-4xl text-5xl font-bold leading-[1.1] tracking-tighter text-white sm:text-7xl mb-8"
-        >
-          Understand any <br className="hidden sm:block" />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500">
-            codebase instantly.
-          </span>
-        </motion.h1>
-
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="max-w-2xl text-lg leading-relaxed text-slate-400 mb-10"
-        >
-          Upload a repository, folder, or zip file. CodeLens analyzes your entire architecture, explains files, finds bugs, and generates tests in seconds.
-        </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          className="flex flex-col sm:flex-row items-center gap-4"
-        >
-          <Link
-            to="/register"
-            className="group inline-flex items-center justify-center gap-2 rounded-xl bg-white px-8 py-4 text-base font-semibold text-black transition-all hover:bg-slate-200 hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] w-full sm:w-auto"
-          >
-            Start Exploring for Free
-            <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
-          </Link>
-          <a
-            href="#features"
-            className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-8 py-4 text-base font-semibold text-white backdrop-blur-md transition-colors hover:bg-white/10 w-full sm:w-auto"
-          >
-            See how it works
-          </a>
-        </motion.div>
+        <BackgroundPaths title="Understand any codebase instantly." />
 
         {/* Feature Pills */}
         <motion.div 
