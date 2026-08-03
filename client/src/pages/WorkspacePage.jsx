@@ -93,7 +93,7 @@ export function WorkspacePage() {
   }
 
   return (
-    <main className="relative min-h-screen bg-transparent text-slate-200 selection:bg-cyan-500/30 overflow-hidden font-sans">
+    <main className="relative min-h-screen bg-transparent text-slate-200 selection:bg-white/10 overflow-hidden font-sans">
       
       {/* Top Navigation / Header */}
       <header className="relative z-20 border-b border-white/5 bg-[#0c0c0e]/60 backdrop-blur-2xl px-6 py-4 shadow-sm">
@@ -108,7 +108,7 @@ export function WorkspacePage() {
           </div>
           <div className="flex items-center gap-4">
             <div className="hidden items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[11px] font-medium text-slate-300 sm:flex backdrop-blur-md shadow-sm">
-              <Activity size={14} className="text-cyan-400" />
+              <Activity size={14} className="text-slate-400" />
               <span>Usage: {apiCalls}/100 API Calls</span>
             </div>
             <button 

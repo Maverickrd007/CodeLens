@@ -41,7 +41,7 @@ function TreeNode({ node, depth, files, selectedPath, onSelectFile, searchTerm }
         }}
         className={`group flex h-8 w-full items-center gap-2 rounded-md px-2 text-left text-[13px] transition-all duration-200 ${
           isSelected
-            ? 'bg-cyan-500/20 text-cyan-400 font-medium border border-cyan-500/30'
+            ? 'bg-white/10 text-white font-medium border border-white/20'
             : 'text-slate-400 hover:bg-white/[0.04] hover:text-slate-200 border border-transparent'
         }`}
         style={{ paddingLeft: `${depth * 14 + 8}px` }}
@@ -50,15 +50,15 @@ function TreeNode({ node, depth, files, selectedPath, onSelectFile, searchTerm }
           <>
             <ChevronRight
               size={14}
-              className={`shrink-0 transition-transform ${isOpen ? 'rotate-90' : ''} ${isSelected ? 'text-cyan-400' : 'text-slate-500'}`}
+              className={`shrink-0 transition-transform ${isOpen ? 'rotate-90' : ''} ${isSelected ? 'text-white' : 'text-slate-500'}`}
               aria-hidden="true"
             />
-            <Folder size={15} className={`shrink-0 ${isSelected ? 'text-cyan-400' : 'text-slate-500'}`} aria-hidden="true" />
+            <Folder size={15} className={`shrink-0 ${isSelected ? 'text-white' : 'text-slate-500'}`} aria-hidden="true" />
           </>
         ) : (
           <>
             <span className="w-3.5 shrink-0" />
-            <FileCode2 size={15} className={`shrink-0 ${isSelected ? 'text-cyan-400' : 'text-slate-500'}`} aria-hidden="true" />
+            <FileCode2 size={15} className={`shrink-0 ${isSelected ? 'text-white' : 'text-slate-500'}`} aria-hidden="true" />
           </>
         )}
         <span className="truncate tracking-tight">{node.name}</span>
@@ -115,7 +115,7 @@ export function FileExplorerSidebar({ codebase, selectedFile, onSelectFile, onRe
             <X size={14} aria-hidden="true" />
           </button>
         </div>
-        <label className="mt-4 flex h-9 items-center gap-2 rounded-md border border-white/10 bg-black/40 px-3 transition-colors focus-within:border-cyan-500/50 focus-within:bg-black/60 shadow-inner">
+        <label className="mt-4 flex h-9 items-center gap-2 rounded-md border border-white/10 bg-black/40 px-3 transition-colors focus-within:border-white/30 focus-within:bg-black/60 shadow-inner">
           <Search size={14} className="shrink-0 text-slate-500" aria-hidden="true" />
           <input
             value={searchTerm}

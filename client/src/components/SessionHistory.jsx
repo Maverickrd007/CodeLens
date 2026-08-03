@@ -97,7 +97,7 @@ export function SessionHistory({ onSelectSession }) {
                   if (e.key === 'Enter') handleRenameSubmit(session._id);
                   if (e.key === 'Escape') setEditingId(null);
                 }}
-                className="mb-2 w-full rounded border border-cyan-500/50 bg-black/50 px-2 py-1 text-[13px] text-white outline-none"
+                className="mb-2 w-full rounded border border-white/30 bg-black/50 px-2 py-1 text-[13px] text-white outline-none"
               />
             ) : (
               <button

@@ -98,8 +98,8 @@ export function UploadPanel({ onCodebaseReady }) {
       title: 'Connect GitHub',
       description: 'Import a public or private repository directly.',
       icon: Code2,
-      accent: 'group-hover:text-blue-400',
-      bgHover: 'hover:bg-blue-500/5 hover:border-blue-500/20',
+      accent: 'group-hover:text-white',
+      bgHover: 'hover:bg-white/5 hover:border-white/20',
       onClick: () => setActiveAction('github'),
     },
     {
@@ -107,8 +107,8 @@ export function UploadPanel({ onCodebaseReady }) {
       title: 'Upload Folder',
       description: 'Analyze a local directory from your machine.',
       icon: FolderUp,
-      accent: 'group-hover:text-cyan-400',
-      bgHover: 'hover:bg-cyan-500/5 hover:border-cyan-500/20',
+      accent: 'group-hover:text-white',
+      bgHover: 'hover:bg-white/5 hover:border-white/20',
       onClick: () => {
         setActiveAction('folder');
         folderInputRef.current?.click();
@@ -119,8 +119,8 @@ export function UploadPanel({ onCodebaseReady }) {
       title: 'Upload ZIP',
       description: 'Upload a compressed codebase archive.',
       icon: UploadCloud,
-      accent: 'group-hover:text-purple-400',
-      bgHover: 'hover:bg-purple-500/5 hover:border-purple-500/20',
+      accent: 'group-hover:text-white',
+      bgHover: 'hover:bg-white/5 hover:border-white/20',
       onClick: () => {
         setActiveAction('archive');
         archiveInputRef.current?.click();
@@ -144,7 +144,7 @@ export function UploadPanel({ onCodebaseReady }) {
                 <card.icon size={20} />
               </span>
               <div>
-                <h3 className="text-sm font-semibold text-slate-200">{card.title}</h3>
+                <h3 className="text-sm font-semibold text-white">{card.title}</h3>
                 <p className="mt-1 text-xs text-slate-400 line-clamp-2">{card.description}</p>
               </div>
             </button>
@@ -159,9 +159,9 @@ export function UploadPanel({ onCodebaseReady }) {
         >
           <div className="flex items-center justify-between mb-6 border-b border-white/5 pb-4">
             <h3 className="text-base font-medium text-white flex items-center gap-2">
-              {activeAction === 'github' && <><Code2 size={18} className="text-blue-400"/> Connect GitHub</>}
-              {activeAction === 'folder' && <><FolderUp size={18} className="text-cyan-400"/> Upload Folder</>}
-              {activeAction === 'archive' && <><UploadCloud size={18} className="text-purple-400"/> Upload ZIP</>}
+              {activeAction === 'github' && <><Code2 size={18} className="text-slate-200"/> Connect GitHub</>}
+              {activeAction === 'folder' && <><FolderUp size={18} className="text-slate-200"/> Upload Folder</>}
+              {activeAction === 'archive' && <><UploadCloud size={18} className="text-slate-200"/> Upload ZIP</>}
             </h3>
             <button 
               onClick={resetLocalSelection}
@@ -192,7 +192,7 @@ export function UploadPanel({ onCodebaseReady }) {
                 }}
                 onDragLeave={() => setIsDragging(false)}
                 className={`rounded-lg border border-dashed p-8 text-center transition ${
-                  isDragging ? 'border-cyan-500/50 bg-cyan-500/5' : 'border-white/10 bg-black/20 hover:border-white/20'
+                  isDragging ? 'border-white/50 bg-white/5' : 'border-white/10 bg-black/20 hover:border-white/20'
                 }`}
               >
                 <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-white/5 mb-4">

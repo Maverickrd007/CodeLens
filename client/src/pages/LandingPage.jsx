@@ -23,7 +23,7 @@ const featurePills = [
 
 export function LandingPage() {
   return (
-    <main className="relative min-h-screen bg-transparent text-slate-200 selection:bg-cyan-500/30 overflow-hidden font-sans">
+    <main className="relative min-h-screen bg-transparent text-slate-200 selection:bg-white/10 overflow-hidden font-sans">
 
 
       {/* Top Navigation */}
@@ -67,8 +67,8 @@ export function LandingPage() {
               key={pill.text}
               className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 backdrop-blur-md shadow-sm"
             >
-              <pill.icon size={16} className="text-cyan-400" />
-              <span className="text-sm font-medium text-slate-200">{pill.text}</span>
+              <pill.icon size={16} className="text-slate-400" />
+              <span className="text-sm font-medium text-white">{pill.text}</span>
             </div>
           ))}
         </motion.div>
@@ -83,7 +83,7 @@ export function LandingPage() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="md:col-span-2 rounded-3xl border border-white/10 bg-white/[0.02] p-8 backdrop-blur-md hover:bg-white/[0.04] transition-colors">
-            <div className="grid w-12 h-12 place-items-center rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 text-cyan-400 mb-6">
+            <div className="grid w-12 h-12 place-items-center rounded-xl bg-white/5 border border-white/10 text-slate-300 mb-6">
               <Network size={24} />
             </div>
             <h3 className="text-2xl font-bold text-white mb-3">Architectural Clarity</h3>
@@ -93,7 +93,7 @@ export function LandingPage() {
           </div>
           
           <div className="rounded-3xl border border-white/10 bg-white/[0.02] p-8 backdrop-blur-md hover:bg-white/[0.04] transition-colors">
-            <div className="grid w-12 h-12 place-items-center rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30 text-purple-400 mb-6">
+            <div className="grid w-12 h-12 place-items-center rounded-xl bg-white/5 border border-white/10 text-slate-300 mb-6">
               <Bug size={24} />
             </div>
             <h3 className="text-2xl font-bold text-white mb-3">Bug Detection</h3>
@@ -103,7 +103,7 @@ export function LandingPage() {
           </div>
 
           <div className="rounded-3xl border border-white/10 bg-white/[0.02] p-8 backdrop-blur-md hover:bg-white/[0.04] transition-colors">
-            <div className="grid w-12 h-12 place-items-center rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border border-emerald-500/30 text-emerald-400 mb-6">
+            <div className="grid w-12 h-12 place-items-center rounded-xl bg-white/5 border border-white/10 text-slate-300 mb-6">
               <FlaskConical size={24} />
             </div>
             <h3 className="text-2xl font-bold text-white mb-3">Instant Tests</h3>
@@ -113,7 +113,7 @@ export function LandingPage() {
           </div>
 
           <div className="md:col-span-2 rounded-3xl border border-white/10 bg-white/[0.02] p-8 backdrop-blur-md hover:bg-white/[0.04] transition-colors overflow-hidden relative">
-            <div className="grid w-12 h-12 place-items-center rounded-xl bg-gradient-to-br from-amber-500/20 to-orange-500/20 border border-amber-500/30 text-amber-400 mb-6 relative z-10">
+            <div className="grid w-12 h-12 place-items-center rounded-xl bg-white/5 border border-white/10 text-slate-300 mb-6 relative z-10">
               <TerminalSquare size={24} />
             </div>
             <h3 className="text-2xl font-bold text-white mb-3 relative z-10">Chat with your codebase</h3>
@@ -121,7 +121,7 @@ export function LandingPage() {
               Stop context switching. Ask natural language questions right in your workspace and get precise, contextual answers backed by your own code.
             </p>
             {/* Decorative background element for the large card */}
-            <div className="absolute right-0 bottom-0 top-0 w-1/2 bg-gradient-to-l from-amber-500/5 to-transparent pointer-events-none"></div>
+            <div className="absolute right-0 bottom-0 top-0 w-1/2 bg-gradient-to-l from-white/[0.03] to-transparent pointer-events-none"></div>
           </div>
         </div>
       </section>

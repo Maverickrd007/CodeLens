@@ -56,7 +56,7 @@ export function LoginPage() {
   });
 
   return (
-    <main className="relative flex min-h-screen items-center justify-center bg-transparent text-slate-200 overflow-hidden font-sans selection:bg-cyan-500/30">
+    <main className="relative flex min-h-screen items-center justify-center bg-transparent text-slate-200 overflow-hidden font-sans selection:bg-white/10">
       
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
@@ -124,7 +124,7 @@ export function LoginPage() {
                 onChange={updateField}
                 autoComplete="email"
                 required
-                className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-4 py-2.5 text-sm text-slate-200 outline-none transition-all focus:border-cyan-500/50 focus:bg-white/[0.03] focus:ring-1 focus:ring-cyan-500/50 placeholder:text-slate-600"
+                className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-4 py-2.5 text-sm text-slate-200 outline-none transition-all focus:border-white/30 focus:bg-white/[0.03] focus:ring-1 focus:ring-white/20 placeholder:text-slate-600"
                 placeholder="you@example.com"
               />
             </label>
@@ -132,11 +132,11 @@ export function LoginPage() {
             <label className="block">
               <div className="flex items-center justify-between">
                 <span className="text-[13px] font-medium text-slate-300">Password</span>
-                <a href="#" className="text-[12px] font-medium text-cyan-400 hover:text-cyan-300 transition-colors">
+                <a href="#" className="text-[12px] font-medium text-slate-400 hover:text-white transition-colors">
                   Forgot password?
                 </a>
               </div>
-              <div className="mt-2 flex rounded-xl border border-white/10 bg-black/40 focus-within:border-cyan-500/50 focus-within:bg-white/[0.03] focus-within:ring-1 focus-within:ring-cyan-500/50 transition-all">
+              <div className="mt-2 flex rounded-xl border border-white/10 bg-black/40 focus-within:border-white/30 focus-within:bg-white/[0.03] focus-within:ring-1 focus-within:ring-white/20 transition-all">
                 <input
                   name="password"
                   type={showPassword ? 'text' : 'password'}

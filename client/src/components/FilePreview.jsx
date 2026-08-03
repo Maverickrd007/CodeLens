@@ -19,7 +19,7 @@ export function FilePreview({ file }) {
     <section className="flex min-h-[420px] flex-col bg-[#09090b] lg:min-h-0 border-r border-white/5 relative">
       <header className="flex h-[52px] shrink-0 items-center justify-between border-b border-white/5 bg-white/[0.02] px-4 backdrop-blur-md">
         <div className="min-w-0 flex items-center gap-3">
-          <FileCode2 size={16} className="text-cyan-500" />
+          <FileCode2 size={16} className="text-slate-400" />
           <div>
             <h2 className="truncate text-[13px] font-medium text-slate-200">{file.path}</h2>
             <p className="text-[11px] text-slate-500 mt-0.5">

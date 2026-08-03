@@ -29,7 +29,7 @@ function MessageBubble({ message }) {
   return (
     <article className={`flex gap-3 mb-6 ${isUser ? 'justify-end' : ''}`}>
       {!isUser ? (
-        <span className="mt-1 grid size-8 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/20">
+        <span className="mt-1 grid size-8 shrink-0 place-items-center rounded-xl bg-white/10 border border-white/20 text-white shadow-lg">
           <Icon size={16} aria-hidden="true" />
         </span>
       ) : null}
@@ -47,7 +47,7 @@ function MessageBubble({ message }) {
             <ResponsePanel answer={message.answer} />
             {message.filesUsed?.length ? (
               <p className="mt-4 border-t border-white/10 pt-3 text-[11px] font-medium text-slate-500 flex items-center gap-1.5">
-                <BookOpen size={12} className="text-cyan-500" />
+                <BookOpen size={12} className="text-slate-400" />
                 {message.filesUsed.length} file context item(s)
               </p>
             ) : null}
@@ -183,7 +183,7 @@ export function ChatPanel({ codebase, selectedFile, initialSession, onApiCallSuc
               onClick={() => setTask(option.value)}
               className={`inline-flex items-center justify-center gap-2 rounded-lg border px-3 py-2 text-[12px] font-medium transition-all duration-300 ${
                 task === option.value
-                  ? 'border-cyan-500/50 bg-cyan-500/10 text-cyan-300 shadow-[0_0_15px_rgba(6,182,212,0.15)]'
+                  ? 'border-white/30 bg-white/10 text-white shadow-[0_0_15px_rgba(255,255,255,0.1)]'
                   : 'border-white/5 bg-white/[0.02] text-slate-400 hover:text-slate-200 hover:bg-white/[0.04]'
               } disabled:opacity-30 disabled:cursor-not-allowed`}
             >
@@ -209,7 +209,7 @@ export function ChatPanel({ codebase, selectedFile, initialSession, onApiCallSuc
       </div>
 
       <div className="bg-transparent p-4">
-        <form onSubmit={handleSubmit} className="relative rounded-2xl border border-white/10 bg-black/40 backdrop-blur-xl p-2 shadow-2xl focus-within:border-cyan-500/50 focus-within:bg-black/60 transition-colors">
+        <form onSubmit={handleSubmit} className="relative rounded-2xl border border-white/10 bg-black/40 backdrop-blur-xl p-2 shadow-2xl focus-within:border-white/30 focus-within:bg-black/60 transition-colors">
           {error ? (
             <p className="absolute -top-12 left-0 right-0 rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-2 text-[12px] text-red-200 backdrop-blur-md">
               {error}
@@ -230,7 +230,7 @@ export function ChatPanel({ codebase, selectedFile, initialSession, onApiCallSuc
             <button
               type="submit"
               disabled={!canAsk || isSubmitting || isHistoryOnly}
-              className="inline-flex size-9 items-center justify-center rounded-xl bg-cyan-500 text-white transition-all hover:bg-cyan-400 hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:shadow-none"
+              className="inline-flex size-9 items-center justify-center rounded-xl bg-white text-black transition-all hover:bg-slate-200 hover:shadow-[0_0_20px_rgba(255,255,255,0.2)] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:shadow-none"
             >
               {isSubmitting ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} className="ml-0.5" />}
             </button>

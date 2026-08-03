@@ -21,7 +21,7 @@ const featurePills = [
 
 export function AuthLayout({ title, subtitle, children }) {
   return (
-    <main className="relative min-h-screen bg-transparent text-slate-200 selection:bg-cyan-500/30 overflow-hidden font-sans">
+    <main className="relative min-h-screen bg-transparent text-slate-200 selection:bg-white/10 overflow-hidden font-sans">
       
       <div className="relative z-10 mx-auto grid min-h-screen w-full max-w-7xl items-center gap-12 px-6 py-12 lg:grid-cols-[1.2fr_1fr] lg:px-8">
         
@@ -36,7 +36,7 @@ export function AuthLayout({ title, subtitle, children }) {
             <img src="/logo.png" alt="CodeLens Logo" className="w-12 h-12 rounded-xl shadow-lg" />
             <div>
               <p className="text-2xl font-bold tracking-tight text-white">CodeLens</p>
-              <p className="text-sm font-medium text-cyan-400">AI Workspace</p>
+              <p className="text-sm font-medium text-slate-400">AI Workspace</p>
             </div>
           </motion.div>
 
@@ -48,7 +48,7 @@ export function AuthLayout({ title, subtitle, children }) {
           >
             <h1 className="text-6xl font-bold leading-[1.1] tracking-tighter text-white mb-6">
               Understand any <br/>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500">
+              <span className="text-white">
                 codebase.
               </span>
             </h1>
@@ -67,8 +67,8 @@ export function AuthLayout({ title, subtitle, children }) {
                   whileHover={{ scale: 1.05, y: -2 }}
                   className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 backdrop-blur-md shadow-sm transition-colors hover:bg-white/10 hover:border-white/20"
                 >
-                  <pill.icon size={16} className="text-cyan-400" />
-                  <span className="text-sm font-medium text-slate-200">{pill.text}</span>
+                  <pill.icon size={16} className="text-slate-400" />
+                  <span className="text-sm font-medium text-white">{pill.text}</span>
                 </motion.div>
               ))}
             </div>
@@ -89,7 +89,7 @@ export function AuthLayout({ title, subtitle, children }) {
               <img src="/logo.png" alt="CodeLens Logo" className="w-12 h-12 rounded-xl shadow-lg" />
               <div>
                 <p className="text-xl font-bold text-white">CodeLens</p>
-                <p className="text-xs font-medium text-cyan-400">AI Workspace</p>
+                <p className="text-xs font-medium text-slate-400">AI Workspace</p>
               </div>
             </div>
 
