@@ -189,21 +189,23 @@ export async function googleLogin(req, res) {
     throw new ApiError(400, 'token_required', 'Google token is required.');
   }
 
-  const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-  
-  let ticket;
+  let userInfo;
   try {
-    ticket = await client.verifyIdToken({
-      idToken: token,
-      audience: process.env.GOOGLE_CLIENT_ID,
+    const response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+      headers: { Authorization: `Bearer ${token}` }
     });
+    
+    if (!response.ok) {
+      throw new Error('Failed to fetch user info from Google');
+    }
+    
+    userInfo = await response.json();
   } catch (err) {
     throw new ApiError(401, 'invalid_google_token', 'Invalid Google token.');
   }
 
-  const payload = ticket.getPayload();
-  const email = normalizeEmail(payload.email);
-  const name = normalizeName(payload.name);
+  const email = normalizeEmail(userInfo.email);
+  const name = normalizeName(userInfo.name);
 
   if (!email) {
     throw new ApiError(400, 'email_missing', 'Google account does not have an email address.');
