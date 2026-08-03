@@ -50,36 +50,38 @@ export function BackgroundPaths({
                         ))}
                     </h1>
 
-                    <div
-                        className="inline-flex items-center gap-4 group relative rounded-2xl backdrop-blur-lg 
-                        overflow-hidden transition-shadow duration-300"
-                    >
+                    <div className="inline-flex flex-col sm:flex-row items-center gap-4">
                         <Button
                             asChild
                             variant="ghost"
-                            className="rounded-[1.15rem] px-8 py-6 text-lg font-semibold backdrop-blur-md 
+                            className="group rounded-[1.15rem] px-8 py-6 text-lg font-semibold backdrop-blur-md 
                             bg-white/10 hover:bg-white/20 text-white transition-all duration-300 
-                            group-hover:-translate-y-0.5 border border-white/20
-                            shadow-[0_0_40px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(255,255,255,0.3)]"
+                            hover:-translate-y-0.5 border border-white/20
+                            shadow-[0_0_40px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] w-full sm:w-auto"
                         >
                             <Link to="/register">
-                                <span className="opacity-90 group-hover:opacity-100 transition-opacity">
+                                <span>
                                     Start Exploring for Free
                                 </span>
                                 <span
-                                    className="ml-3 opacity-70 group-hover:opacity-100 group-hover:translate-x-1.5 
-                                    transition-all duration-300"
+                                    className="ml-3 group-hover:translate-x-1.5 transition-transform duration-300"
                                 >
                                     →
                                 </span>
                             </Link>
                         </Button>
-                        <a
-                            href="#features"
-                            className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-transparent px-8 py-6 text-base font-semibold text-white backdrop-blur-md transition-colors hover:bg-white/5"
+                        <Button
+                            asChild
+                            variant="ghost"
+                            className="group rounded-[1.15rem] px-8 py-6 text-lg font-semibold backdrop-blur-md 
+                            bg-white/10 hover:bg-white/20 text-white transition-all duration-300 
+                            hover:-translate-y-0.5 border border-white/20
+                            shadow-[0_0_40px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] w-full sm:w-auto"
                         >
-                            See how it works
-                        </a>
+                            <a href="#features">
+                                See how it works
+                            </a>
+                        </Button>
                     </div>
                 </motion.div>
             </div>
